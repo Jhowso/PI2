@@ -12,8 +12,9 @@ public class Teatro {
     private List<Ingresso> ingressos = new ArrayList<>();
     JFrame tela = new JFrame();
 
-    String[] areas = {"Plateia A", "Plateia B", "Frisa", "Camarote", "Balcão Nobre"};
-    int[][] assentos = {
+    String[][] horarios = new String[3][3]; // 3 peças uma de manhã, de tarde e a noite
+    int[] areas = new int[5]; // Platéia A = 0; Platéia B = 1; Frisas = 2; Camarotes = 3; Balcão Nobre = 4;
+    int[][] qtdAssentos = {
             {5, 5},   // Plateia A com 5 linhas e 5 colunas totalizando 25 assentos
             {10, 10}, // Plateia B com 10 linhas e 10 colunas
             {6, 5},   // 6 frisas e 5 assentos em cada frisa
@@ -58,7 +59,7 @@ public class Teatro {
                 JFrame telaCadastro = new JFrame("Cadastro Usuário");
 
                 telaCadastro.setLayout(new BoxLayout(telaCadastro.getContentPane(), BoxLayout.Y_AXIS));
-                telaCadastro.setSize(850, 300);
+                telaCadastro.setSize(600, 300);
 
                 String[] textosCadastro = {"Nome: ", "CPF: ", "Telefone: ", "Endereço: ", "Data de Nascimento: "};
                 JLabel[] labelsCadastro = new JLabel[5];
@@ -71,6 +72,7 @@ public class Teatro {
 
                     labelsCadastro[i].setAlignmentX(Component.CENTER_ALIGNMENT);
                     textFieldsCadastro[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+                    textFieldsCadastro[i].setMaximumSize(new Dimension(400,20));
 
                     telaCadastro.add(labelsCadastro[i]);
                     telaCadastro.add(textFieldsCadastro[i]);
@@ -104,12 +106,82 @@ public class Teatro {
                             catch (Erros ex){
                                 JOptionPane.showMessageDialog(telaCadastro, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                             }
-
                     }
                 });
                 telaCadastro.setVisible(true);
             }
         });
+
+        compraIngressoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame telaCompra = new JFrame("Compra de Ingressos");
+                telaCompra.setLayout(new BoxLayout(telaCompra.getContentPane(), BoxLayout.Y_AXIS));
+                telaCompra.setSize(850, 300);
+
+                JPanel panel = new JPanel();
+
+                JTextField campocpf = new JTextField(15);
+
+                panel.add(new JLabel("Digite seu CPF: "));
+                panel.add(campocpf);
+
+                int resultado = JOptionPane.showConfirmDialog(null, panel, "Compra de ingresso", JOptionPane.OK_CANCEL_OPTION);
+
+                if(resultado == JOptionPane.OK_OPTION){
+                    String cpf = campocpf.getText();
+                    try {
+                        validarCPF(cpf);
+                    } catch (Erros ex) {
+                        JOptionPane.showMessageDialog(telaCompra, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    boolean usuarioEncontrado = false;
+                    for (Usuario usuario : usuarios) {
+                        if (usuario.getCpf().equals(cpf)) {
+                            usuarioEncontrado = true;
+                            break;
+                        }
+                    }
+
+                    if (usuarioEncontrado) {
+                        JOptionPane.showMessageDialog(null, "Usuário já está cadastrado");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Usuário não está cadastrado. Realize o cadastro primeiro");
+                        botaoCadastroButton.doClick();
+                        return;
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Operação cancelada.");
+                }
+                // Fim das validações para entrar na compra do ingresso.
+
+
+
+
+                telaCompra.setVisible(true);
+            }
+        });
+
+        imprimirIngressoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+
+            }
+        });
+
+
+        estatisticaVendasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+
+            }
+        });
+
         tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tela.setVisible(true);
     }
@@ -145,20 +217,10 @@ public class Teatro {
         }
     }
 }
-
-
-
     /*
     public void exibirAssentos(String[] areas, int[][] assentos) {
-        tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Comportamento ao fechar a janela
-        tela.setLayout(new java.awt.GridLayout(0, 10)); // Layout da janela (ajustável)
-        tela.setSize(800, 600); // Tamanho da janela
-        tela.setTitle("Mapa de Assentos - Teatro ABC");
 
         for (int i = 0; i < areas.length; i++) {
-            JLabel textArea = new JLabel("Selecione seu assento em: " + areas[i]);
-            tela.add(textArea); // Adiciona o nome da área
-
             int linhas = assentos[i][0]; // Número de linhas para a área atual
             int colunas = assentos[i][1]; // Número de colunas para a área atual
             JButton[][] botaoAssentos = new JButton[linhas][colunas]; // Matriz de botões
@@ -171,7 +233,6 @@ public class Teatro {
             }
         }
     }*/
-
 
 
 
