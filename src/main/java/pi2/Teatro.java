@@ -21,7 +21,13 @@ public class Teatro {
             {5, 10},  // 5 camarotes e 10 assentos em cada camarote
             {5, 10}   // Balcão Nobre com 10 linhas e 5 colunas
     };
-    private double[] preco = {40.0, 60.0, 80.0, 120.0, 250.0};
+    private double[] preco = {
+            40.0,
+            60.0,
+            80.0,
+            120.0,
+            250.0
+    };
 
 
     public void menuPrincipal() {
@@ -117,7 +123,7 @@ public class Teatro {
             public void actionPerformed(ActionEvent e) {
                 JFrame telaCompra = new JFrame("Compra de Ingressos");
                 telaCompra.setLayout(new BoxLayout(telaCompra.getContentPane(), BoxLayout.Y_AXIS));
-                telaCompra.setSize(850, 300);
+                telaCompra.setSize(850, 600);
 
                 JPanel panel = new JPanel();
 
@@ -156,8 +162,48 @@ public class Teatro {
                 }
                 // Fim das validações para entrar na compra do ingresso.
 
+                JLabel textPeca = new JLabel("Selecione a peça desejada:  ");
+                telaCompra.add(textPeca);
+                String[] nomePecas = {"Lago dos Cisnes", "Chapeuzinho Vermelho", "Moby-Dick"};
+                JRadioButton[] peca = new JRadioButton[3];
+                ButtonGroup grupoPeca = new ButtonGroup();
+                for(int i = 0; i < 3; i++){
+                    peca[i] = new JRadioButton(nomePecas[i]);
+                    grupoPeca.add(peca[i]);
+                    telaCompra.add(peca[i]);
+                }
 
+                JLabel textHorario = new JLabel("Selecione o horário de preferência:");
+                String[] nomeHorario = {"Manhã", "Tarde", "Noite"};
+                ButtonGroup grupoHorario = new ButtonGroup();
+                JRadioButton[] horario = new JRadioButton[3];
+                telaCompra.add(textHorario);
+                for(int i = 0; i < 3; i++){
+                    horario[i] = new JRadioButton(nomeHorario[i]);
+                    grupoHorario.add(horario[i]);
+                    telaCompra.add(horario[i]);
+                }
 
+                JLabel textSessao = new JLabel("Selecione a sessão de preferência: ");
+                String[] nomeSessao = {"Plateia A R$ 40,00", "Plateia B R$ 60,00", "Camarotes R$ 80,00", "Frisas R$ 120,00", "Balcão Nobre R$ 250,00" };
+                JRadioButton[] sessao = new JRadioButton[5];
+                ButtonGroup grupoSessao = new ButtonGroup();
+                telaCompra.add(textSessao);
+                for(int i = 0; i < 5; i++){
+                    sessao[i] = new JRadioButton(nomeSessao[i]);
+                    grupoSessao.add(sessao[i]);
+                    telaCompra.add(sessao[i]);
+                }
+
+                JButton confirmaSelecaoButton = new JButton("Confirmar seleção");
+                telaCompra.add(confirmaSelecaoButton);
+
+                confirmaSelecaoButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                    }
+                });
 
                 telaCompra.setVisible(true);
             }
@@ -178,7 +224,6 @@ public class Teatro {
             public void actionPerformed(ActionEvent e) {
 
 
-
             }
         });
 
@@ -193,6 +238,7 @@ public class Teatro {
                 return;
             }
         }
+
         try{
             validarCPF(cpf);
             usuarios.add(new Usuario(nome, cpf, telefone, endereco, dataNascimento));
@@ -203,7 +249,6 @@ public class Teatro {
     }
 
     public static void validarCPF(String cpf) throws Erros {
-
         cpf = cpf.replaceAll("\\D", "");
 
         // Verifica se o CPF tem 11 dígitos
