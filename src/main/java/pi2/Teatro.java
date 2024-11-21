@@ -2,10 +2,8 @@ package pi2;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +14,7 @@ public class Teatro {
     private static JPanel resultadoPanel = new JPanel();
 
     final static String[][] horarios = new String[3][3]; // 3 peças uma de manhã, de tarde e a noite, e 5 sessões:
-    final static String[] sessoes = {"Platéia A", "Platéia B", "Frisas", "Camarotes", "Balcão Nobre"}; // Platéia A = 0; Platéia B = 1; Frisas = 2; Camarotes = 3; Balcão Nobre = 4;
+    final static String[] sessoes = {"Platéia A", "Platéia B", "Camarotes", "Frisas", "Balcão Nobre"}; // Platéia A = 0; Platéia B = 1; Frisas = 2; Camarotes = 3; Balcão Nobre = 4;
     final static int[][] qtdAssentos = {
             {5, 5},   // Plateia A com 5 linhas e 5 colunas totalizando 25 assentos
             {10, 10}, // Plateia B com 10 linhas e 10 colunas totalizando 100 assentos
@@ -40,10 +38,9 @@ public class Teatro {
             120.0,
             250.0
     };
-
+    static JButton botaoAssento;
 
     public void menuPrincipal() {
-        String nome, cpf, telefone, endereco, dataNascimento;
         tela.setTitle("Menu Principal");
         tela.setLayout(new BoxLayout(tela.getContentPane(), BoxLayout.Y_AXIS));
         tela.setSize(500, 400);
@@ -70,6 +67,26 @@ public class Teatro {
         tela.add(imprimirIngressoButton);
         tela.add(Box.createVerticalStrut(20));
         tela.add(estatisticaVendasButton);
+
+        // Lê as linhas do arquivo usuarios.txt, lê cada linha e cria um novo objeto de usuário para cada linha que tenha os 5 elementos.
+        try (BufferedReader leitor = new BufferedReader(new FileReader("usuarios.txt"))) {
+            String linha;
+            while ((linha = leitor.readLine()) != null) {
+                // Quebra a linha pelo delimitador ","
+                String[] dados = linha.split(",");
+                // Verifica se tem os 5 campos
+                if (dados.length == 5) {
+                    String nome = dados[0];
+                    String cpf = dados[1];
+                    String telefone = dados[2];
+                    String endereco = dados[3];
+                    String dataNascimento = dados[4];
+                    usuarios.add(new Usuario(nome, cpf, telefone, endereco, dataNascimento));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao carregar usuários: " + e.getMessage());
+        }
 
         botaoCadastroButton.addActionListener(new ActionListener() {
             @Override
@@ -172,11 +189,12 @@ public class Teatro {
                 }else{
                     JOptionPane.showMessageDialog(null, "Operação cancelada.");
                     return;
-                }
-                // Fim das validações para entrar na compra do ingresso.
+                }// Fim das validações para realizar a compra do ingresso
+
                 JPanel principalPanel = new JPanel();
                 principalPanel.setLayout(new BoxLayout(principalPanel, BoxLayout.Y_AXIS));
 
+                // Painel de seleção da peça
                 JPanel pecaPanel = new JPanel();
                 JLabel textPeca = new JLabel("Selecione a peça desejada:  ");
                 pecaPanel.add(textPeca);
@@ -190,6 +208,7 @@ public class Teatro {
                 }
                 principalPanel.add(pecaPanel);
 
+                // Painel de seleção do horário
                 JPanel panelHorario = new JPanel();
                 JLabel textHorario = new JLabel("Selecione o horário de preferência:");
                 String[] nomeHorario = {"Manhã", "Tarde", "Noite"};
@@ -203,6 +222,7 @@ public class Teatro {
                 }
                 principalPanel.add(panelHorario);
 
+                // Painel de seleção da sessão.
                 JPanel panelSessao = new JPanel();
                 JLabel textSessao = new JLabel("Selecione a sessão de preferência: ");
                 String[] nomeSessao = {"Plateia A R$ 40,00", "Plateia B R$ 60,00", "Camarotes R$ 80,00", "Frisas R$ 120,00", "Balcão Nobre R$ 250,00" };
@@ -228,12 +248,12 @@ public class Teatro {
 
                     if(grupoPeca.getSelection() == null || grupoHorario.getSelection() == null || grupoSessao.getSelection() == null){
                         JOptionPane.showMessageDialog(null, "Por favor, selecione peça, horário e sessão válidos.");
-                        return;
                     }else {
                         int pecaSelecionada = -1;
                         int horarioSelecionado = -1;
                         int sessaoSelecionada = -1;
 
+                        // Verifica qual peça foi selecionada
                         for (int i = 0; i < peca.length; i++) {
                             if (peca[i].isSelected()) {
                                 pecaSelecionada = i;
@@ -241,6 +261,7 @@ public class Teatro {
                             }
                         }
 
+                        // Verifica qual horário foi selecionado
                         for (int i = 0; i < horario.length; i++) {
                             if (horario[i].isSelected()) {
                                 horarioSelecionado = i;
@@ -248,23 +269,26 @@ public class Teatro {
                             }
                         }
 
+                        // Verifica qual sessão foi selecionada
                         for (int i = 0; i < sessao.length; i++) {
                             if (sessao[i].isSelected()) {
                                 sessaoSelecionada = i;
                                 break;
                             }
                         }
-                            if (pecaSelecionada != -1 && horarioSelecionado != -1 && sessaoSelecionada != -1) {
-                                horarios[pecaSelecionada][horarioSelecionado] = sessoes[sessaoSelecionada];
-                                exibirAssentos(resultadoPanel, qtdAssentos, pecaSelecionada, horarioSelecionado, sessaoSelecionada);
-                                telaCompra.revalidate();
-                                telaCompra.repaint();
+
+                        // Exibe os assentos de acordo com a peça, horário e sessão selecionados.
+                        if (pecaSelecionada != -1 && horarioSelecionado != -1 && sessaoSelecionada != -1) {
+                            horarios[pecaSelecionada][horarioSelecionado] = sessoes[sessaoSelecionada];
+                            exibirAssentos(resultadoPanel, qtdAssentos, pecaSelecionada, horarioSelecionado, sessaoSelecionada);
+                            telaCompra.revalidate();
+                            telaCompra.repaint();
+
+
                         }
                         }
                     }
-
                 });
-
                 telaCompra.setVisible(true);
             }
         });
@@ -303,8 +327,8 @@ public class Teatro {
             validarCPF(cpf);
             usuarios.add(new Usuario(nome, cpf, telefone, endereco, dataNascimento));
             JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
-            try (FileWriter writer = new FileWriter("usuarios.txt", true)) {
-                writer.write(nome + "," + cpf + "," + telefone + "," + endereco + "," + dataNascimento + "\n");
+            try (FileWriter escritor = new FileWriter("usuarios.txt", true)) {
+                escritor.write(nome + "," + cpf + "," + telefone + "," + endereco + "," + dataNascimento + "\n");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao salvar informações do usuário: " + e.getMessage());
             }
@@ -332,14 +356,33 @@ public class Teatro {
         int colunas = qtdAssentos[sessaoSelecionada][1];
         assentosPanel.setLayout(new GridLayout(linhas, colunas));
 
+        boolean[][] assentosReservados = new boolean[linhas][colunas];
+
+        char letra = 'A';
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
-                    assentosPanel.add(new JButton("L"));
+                String identificacao = letra + String.valueOf(j + 1);
+                JButton botaoAssento = new JButton(identificacao);
+                int finalI = i;
+                int finalJ = j;
+                botaoAssento.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (assentosReservados[finalI][finalJ]) {
+                            JOptionPane.showMessageDialog(resultadoPanel, "Assento já reservado!");
+                        } else {
+                            assentosReservados[finalI][finalJ] = true;
+                            botaoAssento.setBackground(Color.RED);
+                            botaoAssento.setText("Reservado");
+                        }
+                    }
+                });
+                assentosPanel.add(botaoAssento);
             }
+            letra++;
         }
 
         resultadoPanel.add(assentosPanel, BorderLayout.CENTER);
-
         resultadoPanel.revalidate();
         resultadoPanel.repaint();
     }
