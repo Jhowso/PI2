@@ -14,7 +14,7 @@ public class Teatro {
     private static List<Ingresso> ingressos = new ArrayList<>();
     JFrame tela = new JFrame();
     private static JPanel resultadoPanel = new JPanel();
-
+    static boolean[][] assentosPreSelecionados;
     final static String[][] horarios = new String[3][3]; // 3 peças uma de manhã, de tarde e a noite, e 5 sessões:
     final static String[] sessoes = {"Platéia A", "Platéia B", "Camarotes", "Frisas", "Balcão Nobre"}; // Platéia A = 0; Platéia B = 1; Frisas = 2; Camarotes = 3; Balcão Nobre = 4;
     final static int[][] qtdAssentos = {
@@ -176,7 +176,9 @@ public class Teatro {
                 } else {
                     JOptionPane.showMessageDialog(null, "Operação cancelada.");
                     return;
-                } // Fim das validações para realizar a compra do ingresso
+                } /*
+                Fim das validações para entrar na compra do ingresso
+                */
 
                 JPanel principalPanel = new JPanel();
                 principalPanel.setLayout(new BoxLayout(principalPanel, BoxLayout.Y_AXIS));
@@ -349,9 +351,14 @@ public class Teatro {
 
         inicializarMatriz(linhas, colunas);
 
+
         char letra = 'A';
         for (int i = 0; i < linhas; i++) {
+            if(sessaoSelecionada == 2 || sessaoSelecionada == 3){
+
+            }
             for (int j = 0; j < colunas; j++) {
+
                 String identificacao = letra + String.valueOf(j + 1);
                 JButton botaoAssento = new JButton(identificacao);
                 int linha = i;
@@ -368,16 +375,38 @@ public class Teatro {
                         break;
                     }
                 }
-
+                assentosPreSelecionados = new boolean[linhas][colunas];
                 if (reservado) {
                     botaoAssento.setBackground(Color.RED);
                     botaoAssento.setText("Reservado");
                     botaoAssento.setEnabled(false);
                 } else {
+
                     botaoAssento.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, linha, coluna, botaoAssento);
+                            // Alterna entre pré-seleção e desmarcação
+                            if (!assentosPreSelecionados[linha][coluna]) {
+                                // Pré-selecionar o assento
+                                botaoAssento.setBackground(Color.YELLOW);
+                                assentosPreSelecionados[linha][coluna] = true;
+                                // Se já estava pré-selecionado, abrir o diálogo de confirmação
+                                int confirmacao = JOptionPane.showConfirmDialog(null, "Confirma a seleção do assento?", "Confirmação", JOptionPane.OK_CANCEL_OPTION);
+
+                                if (confirmacao == JOptionPane.OK_OPTION) {
+                                    reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, linha, coluna, botaoAssento);
+                                    botaoAssento.setBackground(Color.RED);
+                                    botaoAssento.setText("Reservado");
+                                    botaoAssento.setEnabled(false);
+
+                                    // Remover do estado pré-selecionado e marca como selecionado
+                                    assentosPreSelecionados[linha][coluna] = false;
+                                } else if (confirmacao == JOptionPane.CANCEL_OPTION || confirmacao == JOptionPane.CLOSED_OPTION) {
+                                    // Cancelar a pré-seleção e resetar o botão
+                                    botaoAssento.setBackground(null); // Cor padrão
+                                    assentosPreSelecionados[linha][coluna] = false;
+                                }
+                            }
                         }
                     });
                 }
@@ -386,7 +415,6 @@ public class Teatro {
             }
             letra++;
         }
-
         resultadoPanel.add(assentosPanel, BorderLayout.CENTER);
         resultadoPanel.revalidate();
         resultadoPanel.repaint();
@@ -405,7 +433,9 @@ public class Teatro {
             botaoAssento.setBackground(Color.RED);
             botaoAssento.setText("Reservado");
             String poltrona = linha * colunas + coluna + 1 + "";
+
             ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], linha * colunas + coluna + 1, preco[sessaoSelecionada]));
+            // Grava as informações da reserva de assento no arquivo ingressos.txt
             try (FileWriter escritor = new FileWriter("ingressos.txt", true)) {
                 escritor.write(cpf + "," + pecaSelecionada + "," + horarioSelecionado + "," + sessaoSelecionada + "," + poltrona + "," + sessaoSelecionada + "\n");
             } catch (IOException e) {
