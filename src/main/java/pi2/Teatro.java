@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class Teatro {
-    private static List<Usuario> usuarios = new ArrayList<>();
-    private static List<Ingresso> ingressos = new ArrayList<>();
+    private static final List<Usuario> usuarios = new ArrayList<>();
+    private static final List<Ingresso> ingressos = new ArrayList<>();
     JFrame tela = new JFrame();
-    private static JPanel resultadoPanel = new JPanel();
+    private static final JPanel resultadoPanel = new JPanel();
     static boolean[][] assentosPreSelecionados;
-    final static String[][] horarios = new String[3][3]; // 3 peças uma de manhã, de tarde e a noite, e 5 sessões:
     final static String[] sessoes = {"Platéia A", "Platéia B", "Camarotes", "Frisas", "Balcão Nobre"}; // Platéia A = 0; Platéia B = 1; Frisas = 2; Camarotes = 3; Balcão Nobre = 4;
     final static int[][] qtdAssentos = {
             {5, 5},   // Plateia A com 5 linhas e 5 colunas totalizando 25 assentos
@@ -23,13 +22,6 @@ public class Teatro {
             {6, 5},   // 6 frisas e 5 assentos em cada frisa totalizando 30 assentos
             {5, 10},  // 5 camarotes e 10 assentos em cada camarote totalizando 50 assentos
             {5, 10}   // Balcão Nobre com 10 linhas e 5 colunas totalizando 50 assentos
-    };
-    final static boolean[][][] qtdAssentosOcupado = {
-            new boolean[5][5],   // Plateia A
-            new boolean[10][10], // Plateia B
-            new boolean[6][5],   // Frisas
-            new boolean[5][10],  // Camarotes
-            new boolean[5][10]   // Balcão Nobre
     };
     final static String[] nomePecas = {"Lago dos Cisnes", "Chapeuzinho Vermelho", "Moby-Dick"};
     final static String[] nomeHorario = {"Manhã", "Tarde", "Noite"};
@@ -40,8 +32,6 @@ public class Teatro {
             120.0,
             250.0
     };
-    static JButton botaoAssento;
-
     static int linhas, colunas;
     static boolean[][] assentosReservados = new boolean[linhas][colunas];
 
@@ -182,9 +172,10 @@ public class Teatro {
 
                 JPanel principalPanel = new JPanel();
                 principalPanel.setLayout(new BoxLayout(principalPanel, BoxLayout.Y_AXIS));
+                principalPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
                 // Painel de seleção da peça
-                JPanel pecaPanel = new JPanel();
+                JPanel pecaPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JLabel textPeca = new JLabel("Selecione a peça desejada:  ");
                 pecaPanel.add(textPeca);
                 String[] nomePecas = {"Lago dos Cisnes", "Chapeuzinho Vermelho", "Moby-Dick"};
@@ -198,7 +189,7 @@ public class Teatro {
                 principalPanel.add(pecaPanel);
 
                 // Painel de seleção do horário
-                JPanel panelHorario = new JPanel();
+                JPanel panelHorario = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JLabel textHorario = new JLabel("Selecione o horário de preferência:");
                 String[] nomeHorario = {"Manhã", "Tarde", "Noite"};
                 ButtonGroup grupoHorario = new ButtonGroup();
@@ -212,7 +203,7 @@ public class Teatro {
                 principalPanel.add(panelHorario);
 
                 // Painel de seleção da sessão
-                JPanel panelSessao = new JPanel();
+                JPanel panelSessao = new JPanel(new FlowLayout(FlowLayout.LEFT));
                 JLabel textSessao = new JLabel("Selecione a sessão de preferência: ");
                 String[] nomeSessao = {"Plateia A R$ 40,00", "Plateia B R$ 60,00", "Camarotes R$ 80,00", "Frisas R$ 120,00", "Balcão Nobre R$ 250,00"};
                 JRadioButton[] sessao = new JRadioButton[5];
@@ -226,6 +217,7 @@ public class Teatro {
                 principalPanel.add(panelSessao);
 
                 JButton confirmaSelecaoButton = new JButton("Confirmar seleção");
+                confirmaSelecaoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                 principalPanel.add(confirmaSelecaoButton);
 
                 telaCompra.add(principalPanel, BorderLayout.NORTH);
@@ -268,7 +260,6 @@ public class Teatro {
 
                             // Exibe os assentos de acordo com a peça, horário e sessão selecionados
                             if (pecaSelecionada != -1 && horarioSelecionado != -1 && sessaoSelecionada != -1) {
-                                horarios[pecaSelecionada][horarioSelecionado] = sessoes[sessaoSelecionada];
                                 exibirAssentos(resultadoPanel, qtdAssentos, pecaSelecionada, horarioSelecionado, sessaoSelecionada, cpf);
                                 telaCompra.revalidate();
                                 telaCompra.repaint();
@@ -353,9 +344,14 @@ public class Teatro {
 
 
         char letra = 'A';
+        int cont = 1;
         for (int i = 0; i < linhas; i++) {
-            if(sessaoSelecionada == 2 || sessaoSelecionada == 3){
+            if(sessaoSelecionada == 2){
+                assentosPanel.add(new JLabel("Camarote " + cont));
+            }
 
+            if(sessaoSelecionada == 3){
+                assentosPanel.add(new JLabel("Frisa " + cont));
             }
             for (int j = 0; j < colunas; j++) {
 
@@ -391,15 +387,23 @@ public class Teatro {
                                 botaoAssento.setBackground(Color.YELLOW);
                                 assentosPreSelecionados[linha][coluna] = true;
                                 // Se já estava pré-selecionado, abrir o diálogo de confirmação
-                                int confirmacao = JOptionPane.showConfirmDialog(null, "Confirma a seleção do assento?", "Confirmação", JOptionPane.OK_CANCEL_OPTION);
+                                int confirmacao = JOptionPane.showConfirmDialog(
+                                        null,
+                                        "Confirma a seleção do assento?",
+                                        "Confirmação",
+                                        JOptionPane.OK_CANCEL_OPTION
+                                );
 
                                 if (confirmacao == JOptionPane.OK_OPTION) {
+                                    // Reservar o assento
                                     reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, linha, coluna, botaoAssento);
+
+                                    // Atualizar visualmente como "Reservado"
                                     botaoAssento.setBackground(Color.RED);
                                     botaoAssento.setText("Reservado");
                                     botaoAssento.setEnabled(false);
 
-                                    // Remover do estado pré-selecionado e marca como selecionado
+                                    // Remover do estado pré-selecionado
                                     assentosPreSelecionados[linha][coluna] = false;
                                 } else if (confirmacao == JOptionPane.CANCEL_OPTION || confirmacao == JOptionPane.CLOSED_OPTION) {
                                     // Cancelar a pré-seleção e resetar o botão
@@ -414,6 +418,7 @@ public class Teatro {
                 assentosPanel.add(botaoAssento);
             }
             letra++;
+            cont++;
         }
         resultadoPanel.add(assentosPanel, BorderLayout.CENTER);
         resultadoPanel.revalidate();
