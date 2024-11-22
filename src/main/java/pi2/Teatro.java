@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class Teatro {
-
-
     JFrame tela = new JFrame();
     private static final JPanel resultadoPanel = new JPanel();
     static boolean[][] assentosPreSelecionados;
@@ -292,8 +290,6 @@ public class Teatro {
         tela.setVisible(true);
     }
 
-
-
     public static void inicializarMatriz(int totalLinhas, int totalColunas) {
         linhas = totalLinhas;
         colunas = totalColunas;
@@ -376,7 +372,7 @@ public class Teatro {
 
                                 if (confirmacao == JOptionPane.OK_OPTION) {
                                     // Reservar o assento
-                                    reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, linha, coluna, botaoAssento);
+                                    Ingresso.reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, linha, coluna, botaoAssento);
 
                                     // Atualizar visualmente como "Reservado"
                                     botaoAssento.setBackground(Color.RED);
@@ -404,32 +400,6 @@ public class Teatro {
         resultadoPanel.revalidate();
         resultadoPanel.repaint();
     }
-
-    private static void reservarAssentos(String cpf, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, int linha, int coluna, JButton botaoAssento) {
-        if (linha >= assentosReservados.length || coluna >= assentosReservados[linha].length) {
-            JOptionPane.showMessageDialog(null, "Índice fora dos limites!");
-            return;
-        }
-
-        if (assentosReservados[linha][coluna]) {
-            JOptionPane.showMessageDialog(null, "Assento já reservado!");
-        } else {
-            assentosReservados[linha][coluna] = true;
-            botaoAssento.setBackground(Color.RED);
-            botaoAssento.setText("Reservado");
-            String poltrona = linha * colunas + coluna + 1 + "";
-
-            Ingresso.ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], linha * colunas + coluna + 1, preco[sessaoSelecionada]));
-            // Grava as informações da reserva de assento no arquivo ingressos.txt
-            try (FileWriter escritor = new FileWriter("ingressos.txt", true)) {
-                escritor.write(cpf + "," + pecaSelecionada + "," + horarioSelecionado + "," + sessaoSelecionada + "," + poltrona + "," + sessaoSelecionada + "\n");
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Erro ao salvar informações do ingresso: " + e.getMessage());
-            }
-        }
-    }
-
-
 
 
 

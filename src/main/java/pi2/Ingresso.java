@@ -1,10 +1,14 @@
 package pi2;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import static pi2.Teatro.*;
 
 public class Ingresso {
     private String cpfCliente, nomePeca, sessao, horario;
@@ -65,6 +69,30 @@ public class Ingresso {
             }
         } catch (IOException e) {
             System.out.println("Erro ao carregar ingressos: " + e.getMessage());
+        }
+    }
+
+    static void reservarAssentos(String cpf, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, int linha, int coluna, JButton botaoAssento) {
+        if (linha >= assentosReservados.length || coluna >= assentosReservados[linha].length) {
+            JOptionPane.showMessageDialog(null, "Índice fora dos limites!");
+            return;
+        }
+
+        if (assentosReservados[linha][coluna]) {
+            JOptionPane.showMessageDialog(null, "Assento já reservado!");
+        } else {
+            assentosReservados[linha][coluna] = true;
+            botaoAssento.setBackground(Color.RED);
+            botaoAssento.setText("Reservado");
+            String poltrona = linha * colunas + coluna + 1 + "";
+
+            ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], linha * colunas + coluna + 1, Teatro.preco[sessaoSelecionada]));
+            // Grava as informações da reserva de assento no arquivo ingressos.txt
+            try (FileWriter escritor = new FileWriter("ingressos.txt", true)) {
+                escritor.write(cpf + "," + pecaSelecionada + "," + horarioSelecionado + "," + sessaoSelecionada + "," + poltrona + "," + sessaoSelecionada + "\n");
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar informações do ingresso: " + e.getMessage());
+            }
         }
     }
 
