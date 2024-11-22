@@ -4,8 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Teatro {
     private static List<Usuario> usuarios = new ArrayList<>();
@@ -174,7 +176,7 @@ public class Teatro {
                 } else {
                     JOptionPane.showMessageDialog(null, "Operação cancelada.");
                     return;
-                }// Fim das validações para realizar a compra do ingresso
+                } // Fim das validações para realizar a compra do ingresso
 
                 JPanel principalPanel = new JPanel();
                 principalPanel.setLayout(new BoxLayout(principalPanel, BoxLayout.Y_AXIS));
@@ -207,7 +209,7 @@ public class Teatro {
                 }
                 principalPanel.add(panelHorario);
 
-                // Painel de seleção da sessão.
+                // Painel de seleção da sessão
                 JPanel panelSessao = new JPanel();
                 JLabel textSessao = new JLabel("Selecione a sessão de preferência: ");
                 String[] nomeSessao = {"Plateia A R$ 40,00", "Plateia B R$ 60,00", "Camarotes R$ 80,00", "Frisas R$ 120,00", "Balcão Nobre R$ 250,00"};
@@ -262,14 +264,12 @@ public class Teatro {
                                 }
                             }
 
-                            // Exibe os assentos de acordo com a peça, horário e sessão selecionados.
+                            // Exibe os assentos de acordo com a peça, horário e sessão selecionados
                             if (pecaSelecionada != -1 && horarioSelecionado != -1 && sessaoSelecionada != -1) {
                                 horarios[pecaSelecionada][horarioSelecionado] = sessoes[sessaoSelecionada];
                                 exibirAssentos(resultadoPanel, qtdAssentos, pecaSelecionada, horarioSelecionado, sessaoSelecionada, cpf);
                                 telaCompra.revalidate();
                                 telaCompra.repaint();
-
-
                             }
                         }
                     }
@@ -335,7 +335,9 @@ public class Teatro {
         infoPanel.add(new JLabel("Peça: " + nomePecas[pecaSelecionada]));
         infoPanel.add(new JLabel("Horário: " + nomeHorario[horarioSelecionado]));
         infoPanel.add(new JLabel("Sessão: " + sessoes[sessaoSelecionada]));
-        infoPanel.add(new JLabel("Valor: " + preco[sessaoSelecionada]));
+        NumberFormat formatoMoeda = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+        String valorFormatado = formatoMoeda.format(preco[sessaoSelecionada]);
+        infoPanel.add(new JLabel("Valor: " + valorFormatado));
         infoPanel.add(new JLabel("Disposição dos Assentos:"));
 
         resultadoPanel.add(infoPanel, BorderLayout.NORTH);
@@ -345,7 +347,6 @@ public class Teatro {
         int colunas = qtdAssentos[sessaoSelecionada][1];
         assentosPanel.setLayout(new GridLayout(linhas, colunas));
 
-        // Inicializa a matriz de assentos reservados
         inicializarMatriz(linhas, colunas);
 
         char letra = 'A';
