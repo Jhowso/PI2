@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Teatro {
-    private static final List<Usuario> usuarios = new ArrayList<>();
-    private static final List<Ingresso> ingressos = new ArrayList<>();
+
+
     JFrame tela = new JFrame();
     private static final JPanel resultadoPanel = new JPanel();
     static boolean[][] assentosPreSelecionados;
@@ -36,8 +36,8 @@ public class Teatro {
     static boolean[][] assentosReservados = new boolean[linhas][colunas];
 
     public void menuPrincipal() {
-        carregarUsuarios();
-        carregarIngressos();
+        Usuario.carregarUsuarios();
+        Ingresso.carregarIngressos();
         tela.setTitle("Menu Principal");
         tela.setLayout(new BoxLayout(tela.getContentPane(), BoxLayout.Y_AXIS));
         tela.setSize(500, 400);
@@ -112,7 +112,7 @@ public class Teatro {
                                 String endereco = textFieldsCadastro[3].getText();
                                 String dataNascimento = textFieldsCadastro[4].getText();
 
-                                cadastrarUsuario(nome, cpf, telefone, endereco, dataNascimento);
+                                Usuario.cadastrarUsuario(nome, cpf, telefone, endereco, dataNascimento);
                             }
                         } catch (Erros ex) {
                             JOptionPane.showMessageDialog(telaCadastro, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -149,7 +149,7 @@ public class Teatro {
                     }
 
                     boolean usuarioEncontrado = false;
-                    for (Usuario usuario : usuarios) {
+                    for (Usuario usuario : Usuario.usuarios) {
                         if (usuario.getCpf().equals(cpf)) {
                             usuarioEncontrado = true;
                             break;
@@ -292,27 +292,7 @@ public class Teatro {
         tela.setVisible(true);
     }
 
-    public void cadastrarUsuario(String nome, String cpf, String telefone, String endereco, String dataNascimento) {
-        for (Usuario usuario : usuarios) {
-            if (usuario.getCpf().equals(cpf)) {
-                JOptionPane.showMessageDialog(null, "Usuário já está cadastrado");
-                return;
-            }
-        }
 
-        try {
-            validarCPF(cpf);
-            usuarios.add(new Usuario(nome, cpf, telefone, endereco, dataNascimento));
-            JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
-            try (FileWriter escritor = new FileWriter("usuarios.txt", true)) {
-                escritor.write(nome + "," + cpf + "," + telefone + "," + endereco + "," + dataNascimento + "\n");
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Erro ao salvar informações do usuário: " + e.getMessage());
-            }
-        } catch (Erros e) {
-            JOptionPane.showMessageDialog(null, "CPF inválido: " + e.getMessage());
-        }
-    }
 
     public static void inicializarMatriz(int totalLinhas, int totalColunas) {
         linhas = totalLinhas;
@@ -362,7 +342,7 @@ public class Teatro {
 
                 // Verifica se o assento está reservado
                 boolean reservado = false;
-                for (Ingresso ingresso : ingressos) {
+                for (Ingresso ingresso : Ingresso.ingressos) {
                     if (ingresso.getNomePeca().equals(nomePecas[pecaSelecionada]) &&
                             ingresso.getHorario().equals(nomeHorario[horarioSelecionado]) &&
                             ingresso.getSessao().equals(sessoes[sessaoSelecionada]) &&
@@ -439,7 +419,7 @@ public class Teatro {
             botaoAssento.setText("Reservado");
             String poltrona = linha * colunas + coluna + 1 + "";
 
-            ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], linha * colunas + coluna + 1, preco[sessaoSelecionada]));
+            Ingresso.ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], linha * colunas + coluna + 1, preco[sessaoSelecionada]));
             // Grava as informações da reserva de assento no arquivo ingressos.txt
             try (FileWriter escritor = new FileWriter("ingressos.txt", true)) {
                 escritor.write(cpf + "," + pecaSelecionada + "," + horarioSelecionado + "," + sessaoSelecionada + "," + poltrona + "," + sessaoSelecionada + "\n");
@@ -449,50 +429,9 @@ public class Teatro {
         }
     }
 
-    public static void carregarUsuarios() {
-        // Lê as linhas do arquivo usuarios.txt, lê cada linha e cria um novo objeto de usuário para cada linha que tenha os 5 elementos.
-        try (BufferedReader leitor = new BufferedReader(new FileReader("usuarios.txt"))) {
-            String linha;
-            while ((linha = leitor.readLine()) != null) {
-                // Quebra a linha pelo delimitador ","
-                String[] dados = linha.split(",");
-                // Verifica se tem os 5 campos
-                if (dados.length == 5) {
-                    String nome = dados[0];
-                    String cpf = dados[1];
-                    String telefone = dados[2];
-                    String endereco = dados[3];
-                    String dataNascimento = dados[4];
-                    usuarios.add(new Usuario(nome, cpf, telefone, endereco, dataNascimento));
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao carregar usuários: " + e.getMessage());
-        }
-    }
 
-    public static void carregarIngressos() {
-        try (BufferedReader leitor = new BufferedReader(new FileReader("ingressos.txt"))) {
-            String linha;
-            while ((linha = leitor.readLine()) != null) {
-                // Quebra a linha pelo delimitador ","
-                String[] dados = linha.split(",");
 
-                // Verifica se tem os 6 campos
-                if (dados.length == 6) {
-                    String cpf = dados[0];
-                    int pecaSelecionada = Integer.parseInt(dados[1]);
-                    int horarioSelecionado = Integer.parseInt(dados[2]);
-                    int sessaoSelecionada = Integer.parseInt(dados[3]);
-                    int poltrona = Integer.parseInt(dados[4]);
-                    double preco = Double.parseDouble(dados[5]);
-                    ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], poltrona, preco));
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao carregar ingressos: " + e.getMessage());
-        }
-    }
+
 
     public static void validarCPF(String cpf) throws Erros {
         cpf = cpf.replaceAll("\\D", "");
