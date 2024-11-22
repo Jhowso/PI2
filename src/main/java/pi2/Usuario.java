@@ -6,7 +6,7 @@ public class Usuario {
     public Usuario(String nome, String cpf, String telefone, String endereco, String dataNascimento){
         this.nome = nome;
         this.cpf = cpf;
-        this.telefone = cpf;
+        this.telefone = telefone;
         this.endereco = endereco;
         this.dataNascimento = dataNascimento;
     }

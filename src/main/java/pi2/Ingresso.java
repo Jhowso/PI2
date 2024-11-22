@@ -1,15 +1,15 @@
 package pi2;
 
 public class Ingresso {
-    private String cpfCliente, nomePeca, sessao, area;
+    private String cpfCliente, nomePeca, sessao, horario;
     private int poltrona;
     private double preco;
 
-    public Ingresso(String cpfCliente, String nomePeca, String sessao, String area, int poltrona, double preco){
+    public Ingresso(String cpfCliente, String nomePeca, String horario, String sessao, int poltrona, double preco){
         this.cpfCliente = cpfCliente;
         this.nomePeca = nomePeca;
+        this.horario = horario;
         this.sessao = sessao;
-        this.area = area;
         this.poltrona = poltrona;
         this.preco = preco;
     }
@@ -22,8 +22,8 @@ public class Ingresso {
         return poltrona;
     }
 
-    public String getArea() {
-        return area;
+    public String getHorario() {
+        return horario;
     }
 
     public String getCpfCliente() {
