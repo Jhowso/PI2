@@ -3,10 +3,7 @@ package pi2;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class Teatro {
@@ -31,6 +28,7 @@ public class Teatro {
             250.0
     };
     static int linhas, colunas;
+    String cpf;
     static boolean[][] assentosReservados = new boolean[linhas][colunas];
 
     public void menuPrincipal() {
@@ -63,111 +61,117 @@ public class Teatro {
         tela.add(Box.createVerticalStrut(20));
         tela.add(estatisticaVendasButton);
 
+        botaoCadastroButton.addActionListener(e -> abrirTelaCadastro());
+        compraIngressoButton.addActionListener(e -> abrirTelaCompra(cpf));
+        imprimirIngressoButton.addActionListener(e -> abrirTelaImpressao());
+        estatisticaVendasButton.addActionListener(e -> abrirTelaEstatisticas());
+        tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        tela.setVisible(true);
+        }
 
-        botaoCadastroButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame telaCadastro = new JFrame("Cadastro Usuário");
+    private void abrirTelaEstatisticas() {
+    }
 
-                telaCadastro.setLayout(new BoxLayout(telaCadastro.getContentPane(), BoxLayout.Y_AXIS));
-                telaCadastro.setSize(600, 300);
+    private void abrirTelaImpressao() {
+    }
 
-                String[] textosCadastro = {"Nome: ", "CPF: ", "Telefone: ", "Endereço: ", "Data de Nascimento: "};
-                JLabel[] labelsCadastro = new JLabel[5];
-                JTextField[] textFieldsCadastro = new JTextField[5];
-                JButton salvarButton = new JButton("Salvar");
+    public void abrirTelaCadastro() {
+            JFrame telaCadastro = new JFrame("Cadastro Usuário");
+            telaCadastro.setLayout(new BoxLayout(telaCadastro.getContentPane(), BoxLayout.Y_AXIS));
+            telaCadastro.setSize(600, 300);
 
-                for (int i = 0; i < 5; i++) {
-                    labelsCadastro[i] = new JLabel(textosCadastro[i]);
-                    textFieldsCadastro[i] = new JTextField(20);
+            String[] textosCadastro = {"Nome: ", "CPF: ", "Telefone: ", "Endereço: ", "Data de Nascimento: "};
+            JLabel[] labelsCadastro = new JLabel[5];
+            JTextField[] textFieldsCadastro = new JTextField[5];
+            JButton salvarButton = new JButton("Salvar");
 
-                    labelsCadastro[i].setAlignmentX(Component.CENTER_ALIGNMENT);
-                    textFieldsCadastro[i].setAlignmentX(Component.CENTER_ALIGNMENT);
-                    textFieldsCadastro[i].setMaximumSize(new Dimension(400, 20));
+            for (int i = 0; i < 5; i++) {
+                labelsCadastro[i] = new JLabel(textosCadastro[i]);
+                textFieldsCadastro[i] = new JTextField(20);
 
-                    telaCadastro.add(labelsCadastro[i]);
-                    telaCadastro.add(textFieldsCadastro[i]);
+                labelsCadastro[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+                textFieldsCadastro[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+                textFieldsCadastro[i].setMaximumSize(new Dimension(400, 20));
+
+                telaCadastro.add(labelsCadastro[i]);
+                telaCadastro.add(textFieldsCadastro[i]);
+            }
+
+            telaCadastro.add(Box.createVerticalStrut(20));
+            salvarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            telaCadastro.add(salvarButton);
+
+            salvarButton.addActionListener(e -> salvarCadastroUsuario(textFieldsCadastro, telaCadastro));
+
+            telaCadastro.setVisible(true);
+        }
+
+        public void salvarCadastroUsuario(JTextField[] textFieldsCadastro, JFrame telaCadastro) {
+            try {
+                for (JTextField textField : textFieldsCadastro) {
+                    if (textField.getText() == null || textField.getText().isEmpty()) {
+                        throw new Erros("Os campos não podem ser vazios!");
+                    }
                 }
 
-                telaCadastro.add(Box.createVerticalStrut(20));
-                salvarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-                telaCadastro.add(salvarButton);
+                String nome = textFieldsCadastro[0].getText();
+                String cpf = textFieldsCadastro[1].getText();
+                String telefone = textFieldsCadastro[2].getText();
+                String endereco = textFieldsCadastro[3].getText();
+                String dataNascimento = textFieldsCadastro[4].getText();
 
-                salvarButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            if (textFieldsCadastro[0].getText() == null || textFieldsCadastro[0].getText().isEmpty() ||
-                                    textFieldsCadastro[1].getText() == null || textFieldsCadastro[1].getText().isEmpty() ||
-                                    textFieldsCadastro[2].getText() == null || textFieldsCadastro[2].getText().isEmpty() ||
-                                    textFieldsCadastro[3].getText() == null || textFieldsCadastro[3].getText().isEmpty() ||
-                                    textFieldsCadastro[4].getText() == null || textFieldsCadastro[4].getText().isEmpty()) {
-                                throw new Erros("Os campos não podem ser vazios!");
-                            } else {
-                                String nome = textFieldsCadastro[0].getText();
-                                String cpf = textFieldsCadastro[1].getText();
-                                String telefone = textFieldsCadastro[2].getText();
-                                String endereco = textFieldsCadastro[3].getText();
-                                String dataNascimento = textFieldsCadastro[4].getText();
-
-                                Usuario.cadastrarUsuario(nome, cpf, telefone, endereco, dataNascimento);
-                            }
-                        } catch (Erros ex) {
-                            JOptionPane.showMessageDialog(telaCadastro, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
-                });
-                telaCadastro.setVisible(true);
+                Usuario.cadastrarUsuario(nome, cpf, telefone, endereco, dataNascimento, telaCadastro);
+            } catch (Erros ex) {
+                JOptionPane.showMessageDialog(telaCadastro, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        });
+        }
 
-        compraIngressoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        public boolean validarUsuarioCadastrado(){
+            JPanel panel = new JPanel();
+            JTextField campocpf = new JTextField(15);
 
+            panel.add(new JLabel("Digite seu CPF: "));
+            panel.add(campocpf);
+
+            int resultado = JOptionPane.showConfirmDialog(null, panel, "Informe seu CPF: ", JOptionPane.OK_CANCEL_OPTION);
+            String cpf;
+
+            if (resultado == JOptionPane.OK_OPTION) {
+                cpf = campocpf.getText();
+                try {
+                    validarCPF(cpf);
+                } catch (Erros ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+
+                boolean usuarioEncontrado = false;
+                for (Usuario usuario : Usuario.usuarios) {
+                    if (usuario.getCpf().equals(cpf)) {
+                        usuarioEncontrado = true;
+                        break;
+                    }
+                }
+
+                if (usuarioEncontrado) {
+                    return true;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Usuário não está cadastrado. Realize o cadastro primeiro");
+                    abrirTelaCadastro();
+                    return false;
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Operação cancelada.");
+                return false;
+            }
+        }
+
+        public void abrirTelaCompra(String cpf) {
+            boolean usuarioEncontrado = validarUsuarioCadastrado();
+            if(usuarioEncontrado) {
+                resultadoPanel.removeAll();
                 JFrame telaCompra = new JFrame("Compra de Ingressos");
                 telaCompra.setLayout(new BorderLayout());
                 telaCompra.setSize(1050, 600);
-
-                JPanel panel = new JPanel();
-                JTextField campocpf = new JTextField(15);
-
-                panel.add(new JLabel("Digite seu CPF: "));
-                panel.add(campocpf);
-
-                int resultado = JOptionPane.showConfirmDialog(null, panel, "Compra de ingresso", JOptionPane.OK_CANCEL_OPTION);
-                String cpf;
-
-                if (resultado == JOptionPane.OK_OPTION) {
-                    cpf = campocpf.getText();
-                    try {
-                        validarCPF(cpf);
-                    } catch (Erros ex) {
-                        JOptionPane.showMessageDialog(telaCompra, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                    }
-
-                    boolean usuarioEncontrado = false;
-                    for (Usuario usuario : Usuario.usuarios) {
-                        if (usuario.getCpf().equals(cpf)) {
-                            usuarioEncontrado = true;
-                            break;
-                        }
-                    }
-
-                    if (usuarioEncontrado) {
-                        JOptionPane.showMessageDialog(null, "Usuário já está cadastrado");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Usuário não está cadastrado. Realize o cadastro primeiro");
-                        botaoCadastroButton.doClick();
-                        return;
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Operação cancelada.");
-                    return;
-                } /*
-                Fim das validações para entrar na compra do ingresso
-                */
-
                 JPanel principalPanel = new JPanel();
                 principalPanel.setLayout(new BoxLayout(principalPanel, BoxLayout.Y_AXIS));
                 principalPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -221,82 +225,55 @@ public class Teatro {
                 telaCompra.add(principalPanel, BorderLayout.NORTH);
                 telaCompra.add(resultadoPanel, BorderLayout.CENTER);
 
-                confirmaSelecaoButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-
-                        if (grupoPeca.getSelection() == null || grupoHorario.getSelection() == null || grupoSessao.getSelection() == null) {
-                            JOptionPane.showMessageDialog(null, "Por favor, selecione peça, horário e sessão válidos.");
-                        } else {
-                            int pecaSelecionada = -1;
-                            int horarioSelecionado = -1;
-                            int sessaoSelecionada = -1;
-
-                            // Verifica qual peça foi selecionada
-                            for (int i = 0; i < peca.length; i++) {
-                                if (peca[i].isSelected()) {
-                                    pecaSelecionada = i;
-                                    break;
-                                }
-                            }
-
-                            // Verifica qual horário foi selecionado
-                            for (int i = 0; i < horario.length; i++) {
-                                if (horario[i].isSelected()) {
-                                    horarioSelecionado = i;
-                                    break;
-                                }
-                            }
-
-                            // Verifica qual sessão foi selecionada
-                            for (int i = 0; i < sessao.length; i++) {
-                                if (sessao[i].isSelected()) {
-                                    sessaoSelecionada = i;
-                                    break;
-                                }
-                            }
-
-                            // Exibe os assentos de acordo com a peça, horário e sessão selecionados
-                            if (pecaSelecionada != -1 && horarioSelecionado != -1 && sessaoSelecionada != -1) {
-                                exibirAssentos(resultadoPanel, qtdAssentos, pecaSelecionada, horarioSelecionado, sessaoSelecionada, cpf);
-                                telaCompra.revalidate();
-                                telaCompra.repaint();
-                            }
-                        }
-                    }
-                });
+                confirmaSelecaoButton.addActionListener(e -> confirmaSelecaoCompraFunc(cpf, grupoPeca, grupoHorario, grupoSessao, peca, horario, sessao, telaCompra));
                 telaCompra.setVisible(true);
             }
-        });
+        }
 
-        imprimirIngressoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        private void confirmaSelecaoCompraFunc(String cpf, ButtonGroup grupoPeca, ButtonGroup grupoHorario, ButtonGroup grupoSessao, JRadioButton[] peca, JRadioButton[] horario, JRadioButton[] sessao, JFrame telaCompra) {
+            if (grupoPeca.getSelection() == null || grupoHorario.getSelection() == null || grupoSessao.getSelection() == null) {
+                JOptionPane.showMessageDialog(null, "Por favor, selecione peça, horário e sessão válidos.");
+            } else {
+                int pecaSelecionada = -1;
+                int horarioSelecionado = -1;
+                int sessaoSelecionada = -1;
 
+                // Verifica qual peça foi selecionada
+                for (int i = 0; i < peca.length; i++) {
+                    if (peca[i].isSelected()) {
+                        pecaSelecionada = i;
+                        break;
+                    }
+                }
+
+                // Verifica qual horário foi selecionado
+                for (int i = 0; i < horario.length; i++) {
+                    if (horario[i].isSelected()) {
+                        horarioSelecionado = i;
+                        break;
+                    }
+                }
+
+                // Verifica qual sessão foi selecionada
+                for (int i = 0; i < sessao.length; i++) {
+                    if (sessao[i].isSelected()) {
+                        sessaoSelecionada = i;
+                        break;
+                    }
+                }
+
+                // Exibe os assentos de acordo com a peça, horário e sessão selecionados
+                if (pecaSelecionada != -1 && horarioSelecionado != -1 && sessaoSelecionada != -1) {
+                    exibirAssentos(resultadoPanel, qtdAssentos, pecaSelecionada, horarioSelecionado, sessaoSelecionada, cpf);
+                    telaCompra.revalidate();
+                    telaCompra.repaint();
+                }
 
             }
-        });
+        }
 
 
-        estatisticaVendasButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-
-            }
-        });
-
-        tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        tela.setVisible(true);
-    }
-
-    public static void inicializarMatriz(int totalLinhas, int totalColunas) {
-        linhas = totalLinhas;
-        colunas = totalColunas;
-        assentosReservados = new boolean[linhas][colunas];
-    }
-
-    public static void exibirAssentos(JPanel resultadoPanel, int[][] qtdAssentos, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, String cpf) {
+    public void exibirAssentos(JPanel resultadoPanel, int[][] qtdAssentos, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, String cpf) {
         resultadoPanel.removeAll();
         resultadoPanel.setLayout(new BorderLayout());
         JPanel infoPanel = new JPanel();
@@ -322,11 +299,11 @@ public class Teatro {
         char letra = 'A';
         int cont = 1;
         for (int i = 0; i < linhas; i++) {
-            if(sessaoSelecionada == 2){
+            if (sessaoSelecionada == 2) {
                 assentosPanel.add(new JLabel("Camarote " + cont));
             }
 
-            if(sessaoSelecionada == 3){
+            if (sessaoSelecionada == 3) {
                 assentosPanel.add(new JLabel("Frisa " + cont));
             }
             for (int j = 0; j < colunas; j++) {
@@ -362,30 +339,7 @@ public class Teatro {
                                 // Pré-selecionar o assento
                                 botaoAssento.setBackground(Color.YELLOW);
                                 assentosPreSelecionados[linha][coluna] = true;
-                                // Se já estava pré-selecionado, abrir o diálogo de confirmação
-                                int confirmacao = JOptionPane.showConfirmDialog(
-                                        null,
-                                        "Confirma a seleção do assento?",
-                                        "Confirmação",
-                                        JOptionPane.OK_CANCEL_OPTION
-                                );
 
-                                if (confirmacao == JOptionPane.OK_OPTION) {
-                                    // Reservar o assento
-                                    Ingresso.reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, linha, coluna, botaoAssento);
-
-                                    // Atualizar visualmente como "Reservado"
-                                    botaoAssento.setBackground(Color.RED);
-                                    botaoAssento.setText("Reservado");
-                                    botaoAssento.setEnabled(false);
-
-                                    // Remover do estado pré-selecionado
-                                    assentosPreSelecionados[linha][coluna] = false;
-                                } else if (confirmacao == JOptionPane.CANCEL_OPTION || confirmacao == JOptionPane.CLOSED_OPTION) {
-                                    // Cancelar a pré-seleção e resetar o botão
-                                    botaoAssento.setBackground(null); // Cor padrão
-                                    assentosPreSelecionados[linha][coluna] = false;
-                                }
                             }
                         }
                     });
@@ -396,14 +350,87 @@ public class Teatro {
             letra++;
             cont++;
         }
+        JButton botaoConfirmaCompra = new JButton("Concluir compra");
         resultadoPanel.add(assentosPanel, BorderLayout.CENTER);
-        resultadoPanel.revalidate();
-        resultadoPanel.repaint();
+        resultadoPanel.add(botaoConfirmaCompra, BorderLayout.SOUTH);
+        botaoConfirmaCompra.addActionListener(e -> botaoConfirmaCompraFunc(assentosPanel, cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada));
     }
 
+private void botaoConfirmaCompraFunc(JPanel assentosPanel, String cpf, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada) {
+    // Verificar se há assentos pré-selecionados
+    boolean assentoSelecionado = false;
+    String listaAssentosSelecionados = ""; // Usando String simples para acumular os assentos
 
+    // Identificar todos os assentos pré-selecionados
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+            if (assentosPreSelecionados[i][j]) {
+                assentoSelecionado = true;
+                // Criar a identificação do assento
+                String identificacao = (char) ('A' + i) + String.valueOf(j + 1);
+
+                // Adicionar o assento à lista de selecionados
+                listaAssentosSelecionados += identificacao + "\n"; // Concatenar com nova linha
+
+                // Encontrar o botão correspondente
+                JButton botaoAssento = (JButton) assentosPanel.getComponent(i * colunas + j);
+
+                // Verificar se o botão já foi reservado
+                if (botaoAssento.getBackground() == Color.RED) {
+                    JOptionPane.showMessageDialog(null, "O assento " + identificacao + " já foi reservado.");
+                }
+            }
+        }
+    }
+    if (assentoSelecionado) {
+        // Exibir a lista de assentos selecionados e pedir confirmação
+        int confirmacao = JOptionPane.showConfirmDialog(
+                null,
+                "Confirma a seleção dos seguintes assentos?\n" + listaAssentosSelecionados,
+                "Confirmação de Seleção",
+                JOptionPane.OK_CANCEL_OPTION
+        );
+
+        if (confirmacao == JOptionPane.OK_OPTION) {
+            for (int i = 0; i < linhas; i++) {
+                for (int j = 0; j < colunas; j++) {
+                    if (assentosPreSelecionados[i][j]) {
+                        // Encontrar o botão correspondente
+                        JButton botaoAssento = (JButton) assentosPanel.getComponent(i * colunas + j);
+                        // Reservar o assento
+                        Ingresso.reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botaoAssento);
+                        // Atualizar visualmente como "Reservado"
+                        botaoAssento.setBackground(Color.RED);
+                        botaoAssento.setText("Reservado");
+                        botaoAssento.setEnabled(false);
+                    }
+                }
+            }
+        } else {
+            // Se a confirmação for cancelada, cancelar a seleção
+            for (int i = 0; i < linhas; i++) {
+                for (int j = 0; j < colunas; j++) {
+                    if (assentosPreSelecionados[i][j]) {
+                        // Resetar a cor dos assentos
+                        JButton botaoAssento = (JButton) assentosPanel.getComponent(i * colunas + j);
+                        botaoAssento.setBackground(null);
+                    }
+                }
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Nenhum assento foi selecionado.");
+    }
+}
+
+public static void inicializarMatriz(int totalLinhas, int totalColunas) {
+        linhas = totalLinhas;
+        colunas = totalColunas;
+        assentosReservados = new boolean[linhas][colunas];
+    }
 
     public static void validarCPF(String cpf) throws Erros {
+        // Remove qualquer caractere não numérico
         cpf = cpf.replaceAll("\\D", "");
 
         // Verifica se o CPF tem 11 dígitos
@@ -415,9 +442,32 @@ public class Teatro {
         if (cpf.matches("(\\d)\\1{10}")) {
             throw new Erros("CPF não pode ter todos os dígitos iguais.");
         }
+
+        // Calcula e verifica os dígitos verificadores
+        int soma1 = 0, soma2 = 0;
+        int peso1 = 10, peso2 = 11;
+
+        // Calcula o primeiro dígito verificador
+        for (int i = 0; i < 9; i++) {
+            soma1 += Character.getNumericValue(cpf.charAt(i)) * peso1--;
+        }
+        int digito1 = 11 - (soma1 % 11);
+        if (digito1 >= 10) digito1 = 0; // Se o dígito for 10 ou 11, o valor é 0
+
+        // Calcula o segundo dígito verificador
+        for (int i = 0; i < 9; i++) {
+            soma2 += Character.getNumericValue(cpf.charAt(i)) * peso2--;
+        }
+        soma2 += digito1 * 2;
+        int digito2 = 11 - (soma2 % 11);
+        if (digito2 >= 10) digito2 = 0; // Se o dígito for 10 ou 11, o valor é 0
+
+        // Verifica se os dígitos verificadores calculados coincidem com os informados
+        if (cpf.charAt(9) != (digito1 + '0') || cpf.charAt(10) != (digito2 + '0')) {
+            throw new Erros("CPF inválido.");
+        }
     }
 }
-
 
 
 

@@ -7,8 +7,9 @@
     <list default="true" id="d0751bf8-14e0-489a-a5a6-15266e0c4287" name="Changes" comment="19-11 14:03">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ingressos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ingressos.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Ingresso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Ingresso.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Teatro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Teatro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuarios.txt" beforeDir="false" afterPath="$PROJECT_DIR$/usuarios.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -19,24 +19,8 @@ public class Usuario {
         this.dataNascimento = dataNascimento;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
     public String getCpf() {
         return cpf;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public String getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public String getEndereco() {
-        return endereco;
     }
 
     public static void carregarUsuarios() {
@@ -61,7 +45,7 @@ public class Usuario {
         }
     }
 
-    public static void cadastrarUsuario(String nome, String cpf, String telefone, String endereco, String dataNascimento) {
+    public static void cadastrarUsuario(String nome, String cpf, String telefone, String endereco, String dataNascimento, JFrame telaCadastro) {
         for (Usuario usuario : usuarios) {
             if (usuario.getCpf().equals(cpf)) {
                 JOptionPane.showMessageDialog(null, "Usuário já está cadastrado");
@@ -75,6 +59,7 @@ public class Usuario {
             JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
             try (FileWriter escritor = new FileWriter("usuarios.txt", true)) {
                 escritor.write(nome + "," + cpf + "," + telefone + "," + endereco + "," + dataNascimento + "\n");
+                telaCadastro.dispose();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao salvar informações do usuário: " + e.getMessage());
             }
