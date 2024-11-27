@@ -30,6 +30,7 @@ public class Teatro {
     static int linhas, colunas;
     String cpf;
     static boolean[][] assentosReservados = new boolean[linhas][colunas];
+    private JButton[][] botoesAssentos;
 
     public void menuPrincipal() {
         Usuario.carregarUsuarios();
@@ -142,6 +143,7 @@ public class Teatro {
                 validarCPF(cpf);
             } catch (Erros ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                return false;
             }
 
             boolean usuarioEncontrado = false;
@@ -167,7 +169,7 @@ public class Teatro {
 
     public void abrirTelaCompra(String cpf) {
         boolean usuarioEncontrado = validarUsuarioCadastrado();
-        if(usuarioEncontrado) {
+        if (usuarioEncontrado) {
             resultadoPanel.removeAll();
             JFrame telaCompra = new JFrame("Compra de Ingressos");
             telaCompra.setLayout(new BorderLayout());
@@ -272,7 +274,6 @@ public class Teatro {
         }
     }
 
-
     public void exibirAssentos(JPanel resultadoPanel, int[][] qtdAssentos, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, String cpf) {
         resultadoPanel.removeAll();
         resultadoPanel.setLayout(new BorderLayout());
@@ -293,9 +294,9 @@ public class Teatro {
         int colunas = qtdAssentos[sessaoSelecionada][1];
         assentosPanel.setLayout(new GridLayout(linhas, colunas));
 
+        botoesAssentos = new JButton[linhas][colunas]; // Inicializa a matriz de botões
+        assentosPreSelecionados = new boolean[linhas][colunas]; // Inicializa a matriz de pré-seleção
         inicializarMatriz(linhas, colunas);
-
-
         char letra = 'A';
         int cont = 1;
         for (int i = 0; i < linhas; i++) {
@@ -310,6 +311,7 @@ public class Teatro {
 
                 String identificacao = letra + String.valueOf(j + 1);
                 JButton botaoAssento = new JButton(identificacao);
+                botoesAssentos[i][j] = botaoAssento; // Armazena o botão na matriz
                 int linha = i;
                 int coluna = j;
 
@@ -324,13 +326,11 @@ public class Teatro {
                         break;
                     }
                 }
-                assentosPreSelecionados = new boolean[linhas][colunas];
                 if (reservado) {
                     botaoAssento.setBackground(Color.RED);
                     botaoAssento.setText("Reservado");
                     botaoAssento.setEnabled(false);
                 } else {
-
                     botaoAssento.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -339,7 +339,10 @@ public class Teatro {
                                 // Pré-selecionar o assento
                                 botaoAssento.setBackground(Color.YELLOW);
                                 assentosPreSelecionados[linha][coluna] = true;
-
+                            } else {
+                                // Desmarcar o assento
+                                botaoAssento.setBackground(null);
+                                assentosPreSelecionados[linha][coluna] = false;
                             }
                         }
                     });
@@ -362,8 +365,8 @@ public class Teatro {
         String listaAssentosSelecionados = ""; // Usando String simples para acumular os assentos
 
         // Identificar todos os assentos pré-selecionados
-        for (int i = 0; i < linhas; i++) {
-            for (int j = 0; j < colunas; j++) {
+        for (int i = 0; i < botoesAssentos.length; i++) {
+            for (int j = 0; j < botoesAssentos[i].length; j++) {
                 if (assentosPreSelecionados[i][j]) {
                     assentoSelecionado = true;
                     // Criar a identificação do assento
@@ -372,11 +375,8 @@ public class Teatro {
                     // Adicionar o assento à lista de selecionados
                     listaAssentosSelecionados += identificacao + "\n"; // Concatenar com nova linha
 
-                    // Encontrar o botão correspondente
-                    JButton botaoAssento = (JButton) assentosPanel.getComponent(i * colunas + j);
-
                     // Verificar se o botão já foi reservado
-                    if (botaoAssento.getBackground() == Color.RED) {
+                    if (botoesAssentos[i][j].getBackground() == Color.RED) {
                         JOptionPane.showMessageDialog(null, "O assento " + identificacao + " já foi reservado.");
                     }
                 }
@@ -392,28 +392,28 @@ public class Teatro {
             );
 
             if (confirmacao == JOptionPane.OK_OPTION) {
-                for (int i = 0; i < linhas; i++) {
-                    for (int j = 0; j < colunas; j++) {
+                for (int i = 0; i < botoesAssentos.length; i++) {
+                    for (int j = 0; j < botoesAssentos[i].length; j++) {
                         if (assentosPreSelecionados[i][j]) {
-                            // Encontrar o botão correspondente
-                            JButton botaoAssento = (JButton) assentosPanel.getComponent(i * colunas + j);
                             // Reservar o assento
-                            Ingresso.reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botaoAssento);
+                            Ingresso.reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botoesAssentos[i][j]);
                             // Atualizar visualmente como "Reservado"
-                            botaoAssento.setBackground(Color.RED);
-                            botaoAssento.setText("Reservado");
-                            botaoAssento.setEnabled(false);
+                            botoesAssentos[i][j].setBackground(Color.RED);
+                            botoesAssentos[i][j].setText("Reservado");
+                            botoesAssentos[i][j].setEnabled(false);
+                            // Remover o assento da pré-seleção
+                            assentosPreSelecionados[i][j] = false;
                         }
                     }
                 }
             } else {
                 // Se a confirmação for cancelada, cancelar a seleção
-                for (int i = 0; i < linhas; i++) {
-                    for (int j = 0; j < colunas; j++) {
+                for (int i = 0; i < botoesAssentos.length; i++) {
+                    for (int j = 0; j < botoesAssentos[i].length; j++) {
                         if (assentosPreSelecionados[i][j]) {
                             // Resetar a cor dos assentos
-                            JButton botaoAssento = (JButton) assentosPanel.getComponent(i * colunas + j);
-                            botaoAssento.setBackground(null);
+                            botoesAssentos[i][j].setBackground(null);
+                            assentosPreSelecionados[i][j] = false; // Resetar a pré-seleção
                         }
                     }
                 }
