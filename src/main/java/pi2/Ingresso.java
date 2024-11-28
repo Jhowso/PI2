@@ -48,6 +48,26 @@ public class Ingresso {
         return sessao;
     }
 
+    @Override
+    public String toString() {
+        String nomeUsuario = buscarNomeUsuarioporCpf(cpfCliente);
+        return "Ingresso para o cliente: " + nomeUsuario + "\n" +
+                "Peça: " + nomePeca + "\n" +
+                "Sessão: " + sessao + "\n" +
+                "Horário: " + horario + "\n" +
+                "Poltrona: " + poltrona + "\n" +
+                "Preço: R$ " + preco;
+    }
+
+    private String buscarNomeUsuarioporCpf(String cpf){
+        for(Usuario usuario : Usuario.usuarios){
+            if(usuario.getCpf().equals(cpf)){
+                return usuario.getNome();
+            }
+        }
+        return "Usuário não encontrado";
+    }
+
     public static void carregarIngressos() {
         try (BufferedReader leitor = new BufferedReader(new FileReader("ingressos.txt"))) {
             String linha;
@@ -63,7 +83,7 @@ public class Ingresso {
                     int sessaoSelecionada = Integer.parseInt(dados[3]);
                     int poltrona = Integer.parseInt(dados[4]);
                     double preco = Double.parseDouble(dados[5]);
-                    ingressos.add(new Ingresso(cpf, MenuCompra.nomePecas[pecaSelecionada], MenuCompra.nomeHorario[horarioSelecionado],MenuCompra.sessoes[sessaoSelecionada], poltrona, preco));
+                    ingressos.add(new Ingresso(cpf, MenuCompra.nomePecas[pecaSelecionada], MenuCompra.nomeHorario[horarioSelecionado],MenuCompra.sessoes[sessaoSelecionada], poltrona, MenuCompra.preco[sessaoSelecionada]));
                 }
             }
         } catch (IOException e) {

@@ -33,6 +33,7 @@ public class MenuCompra {
     static int linhas, colunas;
     static boolean[][] assentosReservados = new boolean[linhas][colunas];
     JPanel assentosPanel = new JPanel();
+    public int numColunas;
 
     public void abrirTelaCompra(String cpf) {
         boolean usuarioEncontrado = Usuario.validarUsuarioCadastrado();
@@ -261,7 +262,7 @@ public class MenuCompra {
                     for (int j = 0; j < botoesAssentos[i].length; j++) {
                         if (assentosPreSelecionados[i][j]) {
                             // Reservar o assento
-                            reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botoesAssentos[i][j]);
+                            reservarAssentos(pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botoesAssentos[i][j]);
                             // Atualizar visualmente como "Reservado"
                             botoesAssentos[i][j].setBackground(Color.RED);
                             botoesAssentos[i][j].setText("Reservado");
@@ -288,13 +289,12 @@ public class MenuCompra {
         }
     }
 
-    public void reservarAssentos(String cpf, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, int linha, int coluna, JButton botaoAssento) {
-        cpf = Usuario.cpfAtual;
+    public void reservarAssentos(int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, int linha, int coluna, JButton botaoAssento) {
+        String cpf = Usuario.cpfAtual;
         if (linha >= assentosReservados.length || coluna >= assentosReservados[linha].length) {
             JOptionPane.showMessageDialog(null, "Índice fora dos limites!");
             return;
         }
-
         if (assentosReservados[linha][coluna]) {
             JOptionPane.showMessageDialog(null, "Assento já reservado!");
         } else {
