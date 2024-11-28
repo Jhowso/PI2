@@ -7,8 +7,11 @@
     <list default="true" id="d0751bf8-14e0-489a-a5a6-15266e0c4287" name="Changes" comment="19-11 14:03">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ingressos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ingressos.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Ingresso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Ingresso.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pi2/MenuCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuCompra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/MenuImpressaoIngresso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuImpressaoIngresso.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/MenuEstatistica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuEstatistica.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuarios.txt" beforeDir="false" afterPath="$PROJECT_DIR$/usuarios.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,17 +60,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.App.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/ryan.doriguetto/IdeaProjects/ProjetoIntegrador/src/main/java/org/example/Main.java&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.App.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "onboarding.tips.debug.path": "C:/Users/ryan.doriguetto/IdeaProjects/ProjetoIntegrador/src/main/java/org/example/Main.java",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

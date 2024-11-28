@@ -10,18 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ingresso {
-    private String cpfCliente, nomePeca, sessao, horario;
+    private String cpfCliente, nomePeca, sessao, horario, identificacao;
     private int poltrona;
     private double preco;
     static final List<Ingresso> ingressos = new ArrayList<>();
 
-    public Ingresso(String cpfCliente, String nomePeca, String horario, String sessao, int poltrona, double preco){
+    public Ingresso(String cpfCliente, String nomePeca, String horario, String sessao, int poltrona, double preco, String identificacao){
         this.cpfCliente = cpfCliente;
         this.nomePeca = nomePeca;
         this.horario = horario;
         this.sessao = sessao;
         this.poltrona = poltrona;
         this.preco = preco;
+        this.identificacao = identificacao;
     }
 
     public double getPreco() {
@@ -48,6 +49,10 @@ public class Ingresso {
         return sessao;
     }
 
+    public String getIdentificacao(){
+        return  sessao;
+    }
+
     @Override
     public String toString() {
         String nomeUsuario = buscarNomeUsuarioporCpf(cpfCliente);
@@ -55,7 +60,7 @@ public class Ingresso {
                 "Peça: " + nomePeca + "\n" +
                 "Sessão: " + sessao + "\n" +
                 "Horário: " + horario + "\n" +
-                "Poltrona: " + poltrona + "\n" +
+                "Identificação: " + identificacao + "\n" +
                 "Preço: R$ " + preco;
     }
 
@@ -72,18 +77,23 @@ public class Ingresso {
         try (BufferedReader leitor = new BufferedReader(new FileReader("ingressos.txt"))) {
             String linha;
             while ((linha = leitor.readLine()) != null) {
+                // Ignora linhas que começam com "#"
+                if(linha.startsWith("#")){
+                    continue;
+                }
                 // Quebra a linha pelo delimitador ","
                 String[] dados = linha.split(",");
 
                 // Verifica se tem os 6 campos
-                if (dados.length == 6) {
+                if (dados.length == 7) {
                     String cpf = dados[0];
                     int pecaSelecionada = Integer.parseInt(dados[1]);
                     int horarioSelecionado = Integer.parseInt(dados[2]);
                     int sessaoSelecionada = Integer.parseInt(dados[3]);
                     int poltrona = Integer.parseInt(dados[4]);
                     double preco = Double.parseDouble(dados[5]);
-                    ingressos.add(new Ingresso(cpf, MenuCompra.nomePecas[pecaSelecionada], MenuCompra.nomeHorario[horarioSelecionado],MenuCompra.sessoes[sessaoSelecionada], poltrona, MenuCompra.preco[sessaoSelecionada]));
+                    String identificacao = dados[6];
+                    ingressos.add(new Ingresso(cpf, MenuCompra.nomePecas[pecaSelecionada], MenuCompra.nomeHorario[horarioSelecionado],MenuCompra.sessoes[sessaoSelecionada], poltrona, MenuCompra.preco[sessaoSelecionada], identificacao));
                 }
             }
         } catch (IOException e) {

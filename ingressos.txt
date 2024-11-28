@@ -1,9 +1,17 @@
-71050969189,1,2,1,14,1
-71050969189,1,2,1,16,1
-71050969189,1,2,1,36,1
-71050969189,0,1,1,6,1
-71050969189,0,1,1,24,1
-71050969189,0,1,1,46,1
-71050969189,0,1,1,55,1
-71050969189,0,1,1,56,1
-71050969189,0,1,1,73,1
+# Elementos são separados pelo caractere vírgula, sendo:
+# Primeiro elemento: CPF do cliente
+# Segundo elemento : Peça selecionada (0 = Lago dos Cisnes, 1 = Chapeuzinho Vermelho, 2 = Moby Dick)
+# Terceiro elemento: Horário selecionado (0 = Manhã, 1 = "Tarde", 2 = "Noite")
+# Quarto elemento: Sessão selecionada (0 = Plateia A, 1 = Plateia B, 2 = Frisas, 3 = Camarotes, 4 = Balcão nobre) OBS: também determina o valor de acordo.
+# Quinto elemento: Numeração da poltrona na sessão.
+# Sexto elemento: Valor do ingresso (0 = R$ 40,00, 1 = R$ 60,00, 2 = R$ 80,00, 3 = R$ 120,00, 4 = Balcão Nobre)
+71050969189,1,2,1,14,1,B4
+71050969189,1,2,1,46,1,E6
+71050969189,1,2,1,49,1,E9
+71050969189,1,2,1,54,1,F4
+71050969189,1,2,1,65,1,G5
+71050969189,1,0,2,1,2,A1
+71050969189,1,0,2,11,2,C1
+71050969189,1,0,2,24,2,E4
+71050969189,1,1,1,52,1,F2
+71050969189,1,1,1,55,1,F5

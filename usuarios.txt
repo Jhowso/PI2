@@ -1,2 +1,8 @@
+# Elementos são separados pelo caractere vírgula, sendo:
+# Primeiro elemento: Nome completo do usuário
+# Segundo elemento: CPF do usuário
+# Terceiro elemento: Telefone do usuário
+# Quarto elemento: Endereço do usuário
+# Quinto elemento: Data de nascimento
 Frederico Franco Marques,02304330142,62983302969,Rua JO 42,13/08/2000
 Ryan da Silva Doriguetto,71050969189,62993889974,Rua JO 42,13/08/2003

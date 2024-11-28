@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.NumberFormat;
 
 public class MenuCompra {
     final static String[] sessoes = {"Platéia A", "Platéia B", "Camarotes", "Frisas", "Balcão Nobre"}; // Platéia A = 0; Platéia B = 1; Frisas = 2; Camarotes = 3; Balcão Nobre = 4;
@@ -222,7 +221,7 @@ public class MenuCompra {
         botaoConfirmaCompra.addActionListener(e -> botaoConfirmaCompraFunc(pecaSelecionada, horarioSelecionado, sessaoSelecionada));
     }
 
-    public void reservarAssentos(int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, int linha, int coluna, JButton botaoAssento) {
+    public void reservarAssentos(int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, int linha, int coluna, JButton botaoAssento, String identificacao) {
         String cpf = Usuario.cpfAtual;
         if (linha >= assentosReservados.length || coluna >= assentosReservados[linha].length) {
             JOptionPane.showMessageDialog(null, "Índice fora dos limites!");
@@ -236,10 +235,10 @@ public class MenuCompra {
             botaoAssento.setText("Reservado");
             String poltrona = linha * colunas + coluna + 1 + "";
 
-            Ingresso.ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], linha * colunas + coluna + 1, preco[sessaoSelecionada]));
+            Ingresso.ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], linha * colunas + coluna + 1, preco[sessaoSelecionada], identificacao));
             // Grava as informações da reserva de assento no arquivo ingressos.txt
             try (FileWriter escritor = new FileWriter("ingressos.txt", true)) {
-                escritor.write(cpf + "," + pecaSelecionada + "," + horarioSelecionado + "," + sessaoSelecionada + "," + poltrona + "," + sessaoSelecionada + "\n");
+                escritor.write(cpf + "," + pecaSelecionada + "," + horarioSelecionado + "," + sessaoSelecionada + "," + poltrona + "," + sessaoSelecionada + "," + identificacao + "\n");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao salvar informações do ingresso: " + e.getMessage());
             }
@@ -253,27 +252,19 @@ public class MenuCompra {
     }
 
     private void botaoConfirmaCompraFunc(int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada) {
-        // Verificar se há assentos pré-selecionados
         boolean assentoSelecionado = false;
-        String listaAssentosSelecionados = ""; // Usando String simples para acumular os assentos
-
-        // Identificar todos os assentos atualmente pré-selecionados
+        String listaAssentosSelecionados = "";
         for (int i = 0; i < botoesAssentos.length; i++) {
             for (int j = 0; j < botoesAssentos[i].length; j++) {
                 if (assentosPreSelecionados[i][j]) {
                     assentoSelecionado = true;
-
-                    // Criar a identificação do assento
                     String identificacao = (char) ('A' + i) + String.valueOf(j + 1);
-
-                    // Adicionar o assento à lista de selecionados
                     listaAssentosSelecionados += identificacao + "\n";
                 }
             }
         }
 
         if (assentoSelecionado) {
-            // Exibir a lista de assentos selecionados e pedir confirmação
             int confirmacao = JOptionPane.showConfirmDialog(
                     null,
                     "Confirma a seleção dos seguintes assentos?\n" + listaAssentosSelecionados,
@@ -282,49 +273,36 @@ public class MenuCompra {
             );
 
             if (confirmacao == JOptionPane.OK_OPTION) {
-                // Reservar os assentos confirmados
                 for (int i = 0; i < botoesAssentos.length; i++) {
                     for (int j = 0; j < botoesAssentos[i].length; j++) {
                         if (assentosPreSelecionados[i][j]) {
-                            // Reservar o assento
-                            reservarAssentos(pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botoesAssentos[i][j]);
-                            // Atualizar visualmente como "Reservado"
+                            String identificacao = (char) ('A' + i) + String.valueOf(j + 1);
+                            reservarAssentos(pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botoesAssentos[i][j], identificacao);
                             botoesAssentos[i][j].setBackground(Color.RED);
                             botoesAssentos[i][j].setText("Reservado");
                             botoesAssentos[i][j].setEnabled(false);
-                            // Remover o assento da pré-seleção
                             assentosPreSelecionados[i][j] = false;
                         }
                     }
                 }
 
-                // Solicitar a impressão do ingresso
-                int imprimir = JOptionPane.showConfirmDialog(
-                        null,
-                        "Deseja imprimir o ingresso?",
-                        "Impressão de Ingresso",
-                        JOptionPane.YES_NO_OPTION
-                );
+                int imprimir = JOptionPane.showConfirmDialog(null, "Deseja imprimir o ingresso?", "Impressão de Ingresso", JOptionPane.YES_NO_OPTION);
 
                 if (imprimir == JOptionPane.YES_OPTION) {
-                    // Chamar o método de impressão
                     menuImpressaoIngresso.imprimirIngresso();
                 }
 
             } else {
-                // Se a confirmação for cancelada, cancelar a seleção
                 for (int i = 0; i < botoesAssentos.length; i++) {
                     for (int j = 0; j < botoesAssentos[i].length; j++) {
                         if (assentosPreSelecionados[i][j]) {
-                            // Resetar a cor dos assentos
                             botoesAssentos[i][j].setBackground(null);
-                            assentosPreSelecionados[i][j] = false; // Resetar a pré-seleção
+                            assentosPreSelecionados[i][j] = false;
                         }
                     }
                 }
             }
         } else {
-            // Mensagem caso nenhum assento tenha sido selecionado
             JOptionPane.showMessageDialog(null, "Nenhum assento foi selecionado.");
         }
     }

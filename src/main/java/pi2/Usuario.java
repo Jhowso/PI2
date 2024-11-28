@@ -44,6 +44,11 @@ public class Usuario {
         try (BufferedReader leitor = new BufferedReader(new FileReader("usuarios.txt"))) {
             String linha;
             while ((linha = leitor.readLine()) != null) {
+                // Ignora as linhas que começam com #
+                if(linha.startsWith("#")){
+                    continue;
+                }
+
                 // Quebra a linha pelo delimitador ","
                 String[] dados = linha.split(",");
                 // Verifica se tem os 5 campos
