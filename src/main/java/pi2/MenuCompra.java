@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.Locale;
 
 public class MenuCompra {
     final static String[] sessoes = {"Platéia A", "Platéia B", "Camarotes", "Frisas", "Balcão Nobre"}; // Platéia A = 0; Platéia B = 1; Frisas = 2; Camarotes = 3; Balcão Nobre = 4;
@@ -150,9 +149,7 @@ public class MenuCompra {
         infoPanel.add(new JLabel("Peça: " + nomePecas[pecaSelecionada]));
         infoPanel.add(new JLabel("Horário: " + nomeHorario[horarioSelecionado]));
         infoPanel.add(new JLabel("Sessão: " + sessoes[sessaoSelecionada]));
-        NumberFormat formatoMoeda = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-        String valorFormatado = formatoMoeda.format(preco[sessaoSelecionada]);
-        infoPanel.add(new JLabel("Valor: " + valorFormatado));
+        infoPanel.add(new JLabel("Valor: R$ " + preco[sessaoSelecionada] + "0"));
         infoPanel.add(new JLabel("Disposição dos Assentos:"));
 
         resultadoPanel.add(infoPanel, BorderLayout.NORTH);
@@ -222,10 +219,10 @@ public class MenuCompra {
         JButton botaoConfirmaCompra = new JButton("Concluir compra");
         resultadoPanel.add(assentosPanel, BorderLayout.CENTER);
         resultadoPanel.add(botaoConfirmaCompra, BorderLayout.SOUTH);
-        botaoConfirmaCompra.addActionListener(e -> botaoConfirmaCompraFunc(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada));
+        botaoConfirmaCompra.addActionListener(e -> botaoConfirmaCompraFunc(pecaSelecionada, horarioSelecionado, sessaoSelecionada));
     }
 
-    private void botaoConfirmaCompraFunc(String cpf, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada) {
+    private void botaoConfirmaCompraFunc(int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada) {
         // Verificar se há assentos pré-selecionados
         boolean assentoSelecionado = false;
         String listaAssentosSelecionados = ""; // Usando String simples para acumular os assentos
