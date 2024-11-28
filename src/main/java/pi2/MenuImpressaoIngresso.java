@@ -13,7 +13,7 @@ public class MenuImpressaoIngresso {
         boolean ingressoEncontrado = false;
         for (Ingresso ingresso : Ingresso.ingressos) {
             if (cpf.equals(ingresso.getCpfCliente())) {
-                JOptionPane.showMessageDialog(null, "Ingresso existente para esse usuário: \n\n" + ingresso.toString());
+                JOptionPane.showMessageDialog(null, "Ingresso existente para esse usuário: \n\n" + ingresso);
                 ingressoEncontrado = true;
             }
         }
