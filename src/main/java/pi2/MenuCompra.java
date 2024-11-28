@@ -2,22 +2,15 @@ package pi2;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class Teatro {
-    JFrame tela = new JFrame();
-    private static final JPanel resultadoPanel = new JPanel();
-    static boolean[][] assentosPreSelecionados;
+public class MenuCompra {
     final static String[] sessoes = {"Platéia A", "Platéia B", "Camarotes", "Frisas", "Balcão Nobre"}; // Platéia A = 0; Platéia B = 1; Frisas = 2; Camarotes = 3; Balcão Nobre = 4;
-    final static int[][] qtdAssentos = {
-            {5, 5},   // Plateia A com 5 linhas e 5 colunas totalizando 25 assentos
-            {10, 10}, // Plateia B com 10 linhas e 10 colunas totalizando 100 assentos
-            {6, 5},   // 6 frisas e 5 assentos em cada frisa totalizando 30 assentos
-            {5, 10},  // 5 camarotes e 10 assentos em cada camarote totalizando 50 assentos
-            {5, 10}   // Balcão Nobre com 10 linhas e 5 colunas totalizando 50 assentos
-    };
     final static String[] nomePecas = {"Lago dos Cisnes", "Chapeuzinho Vermelho", "Moby-Dick"};
     final static String[] nomeHorario = {"Manhã", "Tarde", "Noite"};
     final static double[] preco = {
@@ -27,148 +20,22 @@ public class Teatro {
             120.0,
             250.0
     };
-    static int linhas, colunas;
-    String cpf;
-    static boolean[][] assentosReservados = new boolean[linhas][colunas];
+    private static final JPanel resultadoPanel = new JPanel();
+    static boolean[][] assentosPreSelecionados;
     private JButton[][] botoesAssentos;
-
-    public void menuPrincipal() {
-        Usuario.carregarUsuarios();
-        Ingresso.carregarIngressos();
-        tela.setTitle("Menu Principal");
-        tela.setLayout(new BoxLayout(tela.getContentPane(), BoxLayout.Y_AXIS));
-        tela.setSize(500, 400);
-        tela.setLocationRelativeTo(null);
-
-        JLabel text = new JLabel("Bem-vindo ao Teatro ABC!");
-        JButton botaoCadastroButton = new JButton("Cadastrar usuário");
-        JButton compraIngressoButton = new JButton("Comprar ingresso");
-        JButton imprimirIngressoButton = new JButton("Imprimir ingresso");
-        JButton estatisticaVendasButton = new JButton("Estatística de Vendas");
-
-        text.setAlignmentX(Component.CENTER_ALIGNMENT);
-        botaoCadastroButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        compraIngressoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        imprimirIngressoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        estatisticaVendasButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        tela.add(text);
-        tela.add(Box.createVerticalStrut(20));
-        tela.add(botaoCadastroButton);
-        tela.add(Box.createVerticalStrut(20));
-        tela.add(compraIngressoButton);
-        tela.add(Box.createVerticalStrut(20));
-        tela.add(imprimirIngressoButton);
-        tela.add(Box.createVerticalStrut(20));
-        tela.add(estatisticaVendasButton);
-
-        botaoCadastroButton.addActionListener(e -> abrirTelaCadastro());
-        compraIngressoButton.addActionListener(e -> abrirTelaCompra(cpf));
-        imprimirIngressoButton.addActionListener(e -> abrirTelaImpressao());
-        estatisticaVendasButton.addActionListener(e -> abrirTelaEstatisticas());
-        tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        tela.setVisible(true);
-    }
-
-    private void abrirTelaEstatisticas() {
-    }
-
-    private void abrirTelaImpressao() {
-    }
-
-    public void abrirTelaCadastro() {
-        JFrame telaCadastro = new JFrame("Cadastro Usuário");
-        telaCadastro.setLayout(new BoxLayout(telaCadastro.getContentPane(), BoxLayout.Y_AXIS));
-        telaCadastro.setSize(600, 300);
-
-        String[] textosCadastro = {"Nome: ", "CPF: ", "Telefone: ", "Endereço: ", "Data de Nascimento: "};
-        JLabel[] labelsCadastro = new JLabel[5];
-        JTextField[] textFieldsCadastro = new JTextField[5];
-        JButton salvarButton = new JButton("Salvar");
-
-        for (int i = 0; i < 5; i++) {
-            labelsCadastro[i] = new JLabel(textosCadastro[i]);
-            textFieldsCadastro[i] = new JTextField(20);
-
-            labelsCadastro[i].setAlignmentX(Component.CENTER_ALIGNMENT);
-            textFieldsCadastro[i].setAlignmentX(Component.CENTER_ALIGNMENT);
-            textFieldsCadastro[i].setMaximumSize(new Dimension(400, 20));
-
-            telaCadastro.add(labelsCadastro[i]);
-            telaCadastro.add(textFieldsCadastro[i]);
-        }
-
-        telaCadastro.add(Box.createVerticalStrut(20));
-        salvarButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        telaCadastro.add(salvarButton);
-
-        salvarButton.addActionListener(e -> salvarCadastroUsuario(textFieldsCadastro, telaCadastro));
-
-        telaCadastro.setVisible(true);
-    }
-
-    public void salvarCadastroUsuario(JTextField[] textFieldsCadastro, JFrame telaCadastro) {
-        try {
-            for (JTextField textField : textFieldsCadastro) {
-                if (textField.getText() == null || textField.getText().isEmpty()) {
-                    throw new Erros("Os campos não podem ser vazios!");
-                }
-            }
-
-            String nome = textFieldsCadastro[0].getText();
-            String cpf = textFieldsCadastro[1].getText();
-            String telefone = textFieldsCadastro[2].getText();
-            String endereco = textFieldsCadastro[3].getText();
-            String dataNascimento = textFieldsCadastro[4].getText();
-
-            Usuario.cadastrarUsuario(nome, cpf, telefone, endereco, dataNascimento, telaCadastro);
-        } catch (Erros ex) {
-            JOptionPane.showMessageDialog(telaCadastro, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    public boolean validarUsuarioCadastrado(){
-        JPanel panel = new JPanel();
-        JTextField campocpf = new JTextField(15);
-
-        panel.add(new JLabel("Digite seu CPF: "));
-        panel.add(campocpf);
-
-        int resultado = JOptionPane.showConfirmDialog(null, panel, "Informe seu CPF: ", JOptionPane.OK_CANCEL_OPTION);
-        String cpf;
-
-        if (resultado == JOptionPane.OK_OPTION) {
-            cpf = campocpf.getText();
-            try {
-                validarCPF(cpf);
-            } catch (Erros ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
-            boolean usuarioEncontrado = false;
-            for (Usuario usuario : Usuario.usuarios) {
-                if (usuario.getCpf().equals(cpf)) {
-                    usuarioEncontrado = true;
-                    break;
-                }
-            }
-
-            if (usuarioEncontrado) {
-                return true;
-            } else {
-                JOptionPane.showMessageDialog(null, "Usuário não está cadastrado. Realize o cadastro primeiro");
-                abrirTelaCadastro();
-                return false;
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Operação cancelada.");
-            return false;
-        }
-    }
+    final static int[][] qtdAssentos = {
+            {5, 5},   // Plateia A com 5 linhas e 5 colunas totalizando 25 assentos
+            {10, 10}, // Plateia B com 10 linhas e 10 colunas totalizando 100 assentos
+            {6, 5},   // 6 frisas e 5 assentos em cada frisa totalizando 30 assentos
+            {5, 10},  // 5 camarotes e 10 assentos em cada camarote totalizando 50 assentos
+            {5, 10}   // Balcão Nobre com 10 linhas e 5 colunas totalizando 50 assentos
+    };
+    static int linhas, colunas;
+    static boolean[][] assentosReservados = new boolean[linhas][colunas];
+    JPanel assentosPanel = new JPanel();
 
     public void abrirTelaCompra(String cpf) {
-        boolean usuarioEncontrado = validarUsuarioCadastrado();
+        boolean usuarioEncontrado = Usuario.validarUsuarioCadastrado();
         if (usuarioEncontrado) {
             resultadoPanel.removeAll();
             JFrame telaCompra = new JFrame("Compra de Ingressos");
@@ -288,15 +155,13 @@ public class Teatro {
         infoPanel.add(new JLabel("Disposição dos Assentos:"));
 
         resultadoPanel.add(infoPanel, BorderLayout.NORTH);
-
-        JPanel assentosPanel = new JPanel();
         int linhas = qtdAssentos[sessaoSelecionada][0];
         int colunas = qtdAssentos[sessaoSelecionada][1];
         assentosPanel.setLayout(new GridLayout(linhas, colunas));
 
         botoesAssentos = new JButton[linhas][colunas]; // Inicializa a matriz de botões
         assentosPreSelecionados = new boolean[linhas][colunas]; // Inicializa a matriz de pré-seleção
-        inicializarMatriz(linhas, colunas);
+        inicializarAssentos(linhas, colunas);
         char letra = 'A';
         int cont = 1;
         for (int i = 0; i < linhas; i++) {
@@ -356,10 +221,10 @@ public class Teatro {
         JButton botaoConfirmaCompra = new JButton("Concluir compra");
         resultadoPanel.add(assentosPanel, BorderLayout.CENTER);
         resultadoPanel.add(botaoConfirmaCompra, BorderLayout.SOUTH);
-        botaoConfirmaCompra.addActionListener(e -> botaoConfirmaCompraFunc(assentosPanel, cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada));
+        botaoConfirmaCompra.addActionListener(e -> botaoConfirmaCompraFunc(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada));
     }
 
-    private void botaoConfirmaCompraFunc(JPanel assentosPanel, String cpf, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada) {
+    private void botaoConfirmaCompraFunc(String cpf, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada) {
         // Verificar se há assentos pré-selecionados
         boolean assentoSelecionado = false;
         String listaAssentosSelecionados = ""; // Usando String simples para acumular os assentos
@@ -396,7 +261,7 @@ public class Teatro {
                     for (int j = 0; j < botoesAssentos[i].length; j++) {
                         if (assentosPreSelecionados[i][j]) {
                             // Reservar o assento
-                            Ingresso.reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botoesAssentos[i][j]);
+                            reservarAssentos(cpf, pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botoesAssentos[i][j]);
                             // Atualizar visualmente como "Reservado"
                             botoesAssentos[i][j].setBackground(Color.RED);
                             botoesAssentos[i][j].setText("Reservado");
@@ -423,55 +288,34 @@ public class Teatro {
         }
     }
 
-    public static void inicializarMatriz(int totalLinhas, int totalColunas) {
+    public void reservarAssentos(String cpf, int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, int linha, int coluna, JButton botaoAssento) {
+        cpf = Usuario.cpfAtual;
+        if (linha >= assentosReservados.length || coluna >= assentosReservados[linha].length) {
+            JOptionPane.showMessageDialog(null, "Índice fora dos limites!");
+            return;
+        }
+
+        if (assentosReservados[linha][coluna]) {
+            JOptionPane.showMessageDialog(null, "Assento já reservado!");
+        } else {
+            assentosReservados[linha][coluna] = true;
+            botaoAssento.setBackground(Color.RED);
+            botaoAssento.setText("Reservado");
+            String poltrona = linha * colunas + coluna + 1 + "";
+
+            Ingresso.ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], linha * colunas + coluna + 1, preco[sessaoSelecionada]));
+            // Grava as informações da reserva de assento no arquivo ingressos.txt
+            try (FileWriter escritor = new FileWriter("ingressos.txt", true)) {
+                escritor.write(cpf + "," + pecaSelecionada + "," + horarioSelecionado + "," + sessaoSelecionada + "," + poltrona + "," + sessaoSelecionada + "\n");
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar informações do ingresso: " + e.getMessage());
+            }
+        }
+    }
+
+    public static void inicializarAssentos(int totalLinhas, int totalColunas) {
         linhas = totalLinhas;
         colunas = totalColunas;
         assentosReservados = new boolean[linhas][colunas];
     }
-
-    public static void validarCPF(String cpf) throws Erros {
-        // Remove qualquer caractere não numérico
-        cpf = cpf.replaceAll("\\D", "");
-
-        // Verifica se o CPF tem 11 dígitos
-        if (cpf.length() != 11) {
-            throw new Erros("CPF deve ter 11 dígitos.");
-        }
-
-        // Verifica se todos os dígitos são iguais
-        if (cpf.matches("(\\d)\\1{10}")) {
-            throw new Erros("CPF não pode ter todos os dígitos iguais.");
-        }
-
-        // Calcula e verifica os dígitos verificadores
-        int soma1 = 0, soma2 = 0;
-        int peso1 = 10, peso2 = 11;
-
-        // Calcula o primeiro dígito verificador
-        for (int i = 0; i < 9; i++) {
-            soma1 += Character.getNumericValue(cpf.charAt(i)) * peso1--;
-        }
-        int digito1 = 11 - (soma1 % 11);
-        if (digito1 >= 10) digito1 = 0; // Se o dígito for 10 ou 11, o valor é 0
-
-        // Calcula o segundo dígito verificador
-        for (int i = 0; i < 9; i++) {
-            soma2 += Character.getNumericValue(cpf.charAt(i)) * peso2--;
-        }
-        soma2 += digito1 * 2;
-        int digito2 = 11 - (soma2 % 11);
-        if (digito2 >= 10) digito2 = 0; // Se o dígito for 10 ou 11, o valor é 0
-
-        // Verifica se os dígitos verificadores calculados coincidem com os informados
-        if (cpf.charAt(9) != (digito1 + '0') || cpf.charAt(10) != (digito2 + '0')) {
-            throw new Erros("CPF inválido.");
-        }
-    }
 }
-
-
-
-
-
-
-

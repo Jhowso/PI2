@@ -5,9 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0751bf8-14e0-489a-a5a6-15266e0c4287" name="Changes" comment="19-11 14:03">
+      <change afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuCadastro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuCompra.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuEstatistica.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuImpressaoIngresso.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuPrincipal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ingressos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ingressos.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Teatro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Teatro.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Ingresso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Ingresso.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Teatro.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Usuario.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +57,9 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2p4AiA3QeBWjTieOn2ML79YuuId" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
