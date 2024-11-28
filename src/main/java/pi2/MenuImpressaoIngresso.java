@@ -10,7 +10,6 @@ public class MenuImpressaoIngresso {
 
         for (Ingresso ingresso : Ingresso.ingressos) {
             if (cpf.equals(ingresso.getCpfCliente())) {
-                int numColunas;
                 JOptionPane.showMessageDialog(null, "Ingresso existente para esse usuário: \n\n" + ingresso.toString());
                 ingressoEncontrado = true;
             }
