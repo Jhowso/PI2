@@ -20,16 +20,123 @@ public class MenuEstatistica {
         estatisticasPanel.setLayout(new BoxLayout(estatisticasPanel, BoxLayout.Y_AXIS));
         estatisticasPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton botao_min_max_Vendas = new JButton("Peças mais e menos vendidas");
-        estatisticasPanel.add(botao_min_max_Vendas);
-        botao_min_max_Vendas.addActionListener(e -> determinarIngressosVendidos());
+        JButton botaoMinMaxVendas = new JButton("Peças mais e menos vendidas");
+        estatisticasPanel.add(botaoMinMaxVendas);
+        botaoMinMaxVendas.addActionListener(e -> determinarIngressosVendidos());
 
         JButton botaoOcupacaoPoltronasporSessao = new JButton("Ocupação de poltronas por sessão");
         estatisticasPanel.add(botaoOcupacaoPoltronasporSessao);
         botaoOcupacaoPoltronasporSessao.addActionListener(e -> ocupacaoPoltronasporSessao());
 
+        JButton botaoEstatisticaLucroporSessao = new JButton("Peça e sessão mais lucrativa");
+        estatisticasPanel.add(botaoEstatisticaLucroporSessao);
+        botaoEstatisticaLucroporSessao.addActionListener(e -> minMaxLucroPorPecaeSessao());
+
+
+        JButton botaoLucroMedio = new JButton("Lucro por peça");
+        estatisticasPanel.add(botaoLucroMedio);
+        botaoLucroMedio.addActionListener(e -> calcularLucroMedioPorPeca());
+
         telaEstatisticas.add(estatisticasPanel);
         telaEstatisticas.setVisible(true);
+    }
+
+    public static void calcularLucroMedioPorPeca() {
+        // Array para armazenar o lucro total por peça
+        double[] lucroPorPeca = new double[MenuCompra.nomePecas.length];
+
+        // Array para contar o número de ingressos vendidos por peça
+        int[] ingressosPorPeca = new int[MenuCompra.nomePecas.length];
+
+        // Itera sobre os ingressos e acumula os lucros e a contagem
+        for (Ingresso ingresso : Ingresso.ingressos) {
+            for (int i = 0; i < MenuCompra.nomePecas.length; i++) {
+                if (ingresso.getNomePeca().equals(MenuCompra.nomePecas[i])) { // Usa o getter diretamente
+                    lucroPorPeca[i] += ingresso.getPreco(); // Usa o getter para obter o preço
+                    ingressosPorPeca[i]++;                 // Incrementa a contagem de ingressos
+                    break;
+                }
+            }
+        }
+
+        // Inicializa a mensagem para exibição
+        String mensagem = "Lucro médio do teatro por peça:\n";
+        for (int i = 0; i < MenuCompra.nomePecas.length; i++) {
+            if (ingressosPorPeca[i] > 0) {
+                double lucroMedio = lucroPorPeca[i] / ingressosPorPeca[i];
+                mensagem += MenuCompra.nomePecas[i] + ": R$ " + String.format("%.2f", lucroMedio) + "\n";
+            } else {
+                mensagem += MenuCompra.nomePecas[i] + ": Nenhum ingresso vendido\n";
+            }
+        }
+
+        // Exibe a mensagem em uma janela de diálogo
+        JOptionPane.showMessageDialog(null, mensagem, "Lucro Médio por Peça", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+    private static void minMaxLucroPorPecaeSessao() {
+        double[] lucroPorSessao = new double[MenuCompra.sessoes.length];
+        for (Ingresso ingresso : Ingresso.ingressos) {
+            for (int i = 0; i < MenuCompra.sessoes.length; i++) {
+                if (ingresso.getPreco() == MenuCompra.preco[i]) {
+                    lucroPorSessao[i] += ingresso.getPreco();
+                    break;
+                }
+            }
+        }
+
+        double maiorLucroSessao = lucroPorSessao[0];
+        double menorLucroSessao = lucroPorSessao[0];
+        String sessaoMaisLucrativa = MenuCompra.sessoes[0];
+        String sessaoMenosLucrativa = MenuCompra.sessoes[0];
+
+        for (int i = 1; i < lucroPorSessao.length; i++) {
+            if (lucroPorSessao[i] > maiorLucroSessao) {
+                maiorLucroSessao = lucroPorSessao[i];
+                sessaoMaisLucrativa = MenuCompra.sessoes[i];
+            }
+            if (lucroPorSessao[i] < menorLucroSessao) {
+                menorLucroSessao = lucroPorSessao[i];
+                sessaoMenosLucrativa = MenuCompra.sessoes[i];
+            }
+        }
+
+        // Calcula o lucro por peça
+        double[] lucroPorPeca = new double[MenuCompra.nomePecas.length];
+        for (Ingresso ingresso : Ingresso.ingressos) {
+            for (int i = 0; i < MenuCompra.nomePecas.length; i++) {
+                if (ingresso.getNomePeca().equals(MenuCompra.nomePecas[i])) {
+                    lucroPorPeca[i] += ingresso.getPreco();
+                    break;
+                }
+            }
+        }
+
+        double maiorLucroPeca = lucroPorPeca[0];
+        double menorLucroPeca = lucroPorPeca[0];
+        String pecaMaisLucrativa = MenuCompra.nomePecas[0];
+        String pecaMenosLucrativa = MenuCompra.nomePecas[0];
+
+        for (int i = 1; i < lucroPorPeca.length; i++) {
+            if (lucroPorPeca[i] > maiorLucroPeca) {
+                maiorLucroPeca = lucroPorPeca[i];
+                pecaMaisLucrativa = MenuCompra.nomePecas[i];
+            }
+            if (lucroPorPeca[i] < menorLucroPeca) {
+                menorLucroPeca = lucroPorPeca[i];
+                pecaMenosLucrativa = MenuCompra.nomePecas[i];
+            }
+        }
+
+        // Monta o texto para exibição
+        String mensagem = "Sessão com maior lucro: " + sessaoMaisLucrativa + " (R$ " + String.format("%.2f", maiorLucroSessao) + " em vendas)\n" +
+                "Sessão com menor lucro: " + sessaoMenosLucrativa + " (R$ " + String.format("%.2f", menorLucroSessao) + " em vendas)\n\n" +
+                "Peça com maior lucro: " + pecaMaisLucrativa + " (R$ " + String.format("%.2f", maiorLucroPeca) + " em vendas)\n" +
+                "Peça com menor lucro: " + pecaMenosLucrativa + " (R$ " + String.format("%.2f", menorLucroPeca) + " em vendas)";
+
+        // Exibe a mensagem
+        JOptionPane.showMessageDialog(null, mensagem, "Estatísticas de Lucro", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private static void ocupacaoPoltronasporSessao() {
