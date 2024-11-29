@@ -31,7 +31,7 @@ public class MenuCadastro {
         telaCadastro.add(salvarButton);
 
         salvarButton.addActionListener(e -> Usuario.salvarCadastroUsuario(textFieldsCadastro, telaCadastro));
-
+        telaCadastro.setLocationRelativeTo(null);
         telaCadastro.setVisible(true);
     }
 }

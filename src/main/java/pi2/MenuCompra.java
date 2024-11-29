@@ -30,7 +30,6 @@ public class MenuCompra {
     };
     static int linhas, colunas;
     static boolean[][] assentosReservados = new boolean[linhas][colunas];
-    JPanel assentosPanel = new JPanel();
     MenuImpressaoIngresso menuImpressaoIngresso = new MenuImpressaoIngresso();
 
     public void abrirTelaCompra(String cpf) {
@@ -94,6 +93,7 @@ public class MenuCompra {
             telaCompra.add(resultadoPanel, BorderLayout.CENTER);
 
             confirmaSelecaoButton.addActionListener(e -> confirmaSelecaoCompraFunc(cpf, grupoPeca, grupoHorario, grupoSessao, peca, horario, sessao, telaCompra));
+            telaCompra.setLocationRelativeTo(null);
             telaCompra.setVisible(true);
         }
     }
@@ -152,12 +152,14 @@ public class MenuCompra {
         infoPanel.add(new JLabel("Disposição dos Assentos:"));
 
         resultadoPanel.add(infoPanel, BorderLayout.NORTH);
+
+        JPanel assentosPanel = new JPanel();
         int linhas = qtdAssentos[sessaoSelecionada][0];
         int colunas = qtdAssentos[sessaoSelecionada][1];
         assentosPanel.setLayout(new GridLayout(linhas, colunas));
 
-        botoesAssentos = new JButton[linhas][colunas]; // Inicializa a matriz de botões
-        assentosPreSelecionados = new boolean[linhas][colunas]; // Inicializa a matriz de pré-seleção
+        botoesAssentos = new JButton[linhas][colunas];
+        assentosPreSelecionados = new boolean[linhas][colunas];
         inicializarAssentos(linhas, colunas);
         char letra = 'A';
         int cont = 1;
@@ -173,11 +175,10 @@ public class MenuCompra {
 
                 String identificacao = letra + String.valueOf(j + 1);
                 JButton botaoAssento = new JButton(identificacao);
-                botoesAssentos[i][j] = botaoAssento; // Armazena o botão na matriz
+                botoesAssentos[i][j] = botaoAssento;
                 int linha = i;
                 int coluna = j;
 
-                // Verifica se o assento está reservado
                 boolean reservado = false;
                 for (Ingresso ingresso : Ingresso.ingressos) {
                     if (ingresso.getNomePeca().equals(nomePecas[pecaSelecionada]) &&
@@ -219,6 +220,9 @@ public class MenuCompra {
         resultadoPanel.add(assentosPanel, BorderLayout.CENTER);
         resultadoPanel.add(botaoConfirmaCompra, BorderLayout.SOUTH);
         botaoConfirmaCompra.addActionListener(e -> botaoConfirmaCompraFunc(pecaSelecionada, horarioSelecionado, sessaoSelecionada));
+
+        resultadoPanel.revalidate();
+        resultadoPanel.repaint();
     }
 
     public void reservarAssentos(int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, int linha, int coluna, JButton botaoAssento, String identificacao) {
@@ -236,6 +240,7 @@ public class MenuCompra {
             String poltrona = linha * colunas + coluna + 1 + "";
 
             Ingresso.ingressos.add(new Ingresso(cpf, nomePecas[pecaSelecionada], nomeHorario[horarioSelecionado], sessoes[sessaoSelecionada], linha * colunas + coluna + 1, preco[sessaoSelecionada], identificacao));
+
             // Grava as informações da reserva de assento no arquivo ingressos.txt
             try (FileWriter escritor = new FileWriter("ingressos.txt", true)) {
                 escritor.write(cpf + "," + pecaSelecionada + "," + horarioSelecionado + "," + sessaoSelecionada + "," + poltrona + "," + sessaoSelecionada + "," + identificacao + "\n");

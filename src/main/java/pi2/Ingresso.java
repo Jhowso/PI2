@@ -1,10 +1,7 @@
 package pi2;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +47,7 @@ public class Ingresso {
     }
 
     public String getIdentificacao(){
-        return  sessao;
+        return identificacao;
     }
 
     @Override
@@ -81,10 +78,10 @@ public class Ingresso {
                 if(linha.startsWith("#")){
                     continue;
                 }
-                // Quebra a linha pelo delimitador ","
+
                 String[] dados = linha.split(",");
 
-                // Verifica se tem os 6 campos
+                // Verifica se tem os 7 campos
                 if (dados.length == 7) {
                     String cpf = dados[0];
                     int pecaSelecionada = Integer.parseInt(dados[1]);

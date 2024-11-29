@@ -28,19 +28,8 @@ public class Usuario {
         return nome;
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "nome='" + nome + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", endereco='" + endereco + '\'' +
-                ", dataNascimento='" + dataNascimento + '\'' +
-                '}';
-    }
-
+    // Lê as linhas do arquivo usuarios.txt, lê cada linha e carrega um novo objeto de usuário para cada linha que tenha os 5 elementos.
     public static void carregarUsuarios() {
-        // Lê as linhas do arquivo usuarios.txt, lê cada linha e cria um novo objeto de usuário para cada linha que tenha os 5 elementos.
         try (BufferedReader leitor = new BufferedReader(new FileReader("usuarios.txt"))) {
             String linha;
             while ((linha = leitor.readLine()) != null) {
