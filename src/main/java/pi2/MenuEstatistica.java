@@ -8,7 +8,7 @@ public class MenuEstatistica {
     public static void abrirTelaEstatisticas() {
         JFrame telaEstatisticas = new JFrame("Estatísticas de Vendas");
         telaEstatisticas.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        telaEstatisticas.setSize(300, 300);
+        telaEstatisticas.setSize(300, 200);
         ImageIcon icone = new ImageIcon("iconeTeatro.png");
         Image imagemIcone = icone.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
         telaEstatisticas.setIconImage(imagemIcone);

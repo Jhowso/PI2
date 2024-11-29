@@ -5,8 +5,10 @@ import java.util.List;
 
 public class MenuImpressaoIngresso {
     public void abrirTelaImpressaoIngresso() {
-        Usuario.validarUsuarioCadastrado();
-        imprimirIngresso();
+        boolean usuarioEncontrado = Usuario.validarUsuarioCadastrado();
+        if (usuarioEncontrado) {
+            imprimirIngresso();
+        }
     }
 
     public void imprimirIngresso(){

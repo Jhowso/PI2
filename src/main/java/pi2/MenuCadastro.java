@@ -2,6 +2,7 @@ package pi2;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class MenuCadastro {
     public static void abrirTelaCadastro() {
@@ -27,6 +28,15 @@ public class MenuCadastro {
 
             telaCadastro.add(labelsCadastro[i]);
             telaCadastro.add(textFieldsCadastro[i]);
+
+            textFieldsCadastro[i].addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        salvarButton.doClick(); // Simula o clique no botão
+                    }
+                }
+            });
         }
 
         telaCadastro.add(Box.createVerticalStrut(20));
