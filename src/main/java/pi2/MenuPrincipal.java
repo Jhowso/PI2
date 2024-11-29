@@ -12,37 +12,55 @@ public class MenuPrincipal {
         JFrame tela = new JFrame();
         Usuario.carregarUsuarios();
         Ingresso.carregarIngressos();
+
         tela.setTitle("Menu Principal");
-        tela.setLayout(new BoxLayout(tela.getContentPane(), BoxLayout.Y_AXIS));
-        tela.setSize(500, 400);
+        tela.setSize(600, 600);
         tela.setLocationRelativeTo(null);
 
+        JLabel imagemLabel = new JLabel();
+        try {
+            ImageIcon imagem = new ImageIcon("layoutTeatro.jpg");
+            Image scaledImage = imagem.getImage().getScaledInstance(400, 200, Image.SCALE_SMOOTH);
+            imagemLabel.setIcon(new ImageIcon(scaledImage));
+        } catch (Exception e) {
+            imagemLabel.setText("Imagem não encontrada");
+            imagemLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        }
+
         JLabel text = new JLabel("Bem-vindo ao Teatro ABC!");
+        text.setHorizontalAlignment(SwingConstants.CENTER);
+
         JButton botaoCadastroButton = new JButton("Cadastrar usuário");
         JButton compraIngressoButton = new JButton("Comprar ingresso");
         JButton imprimirIngressoButton = new JButton("Imprimir ingresso");
         JButton estatisticaVendasButton = new JButton("Estatística de Vendas");
 
-        text.setAlignmentX(Component.CENTER_ALIGNMENT);
-        botaoCadastroButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        compraIngressoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        imprimirIngressoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        estatisticaVendasButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel centralPanel = new JPanel();
+        centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
+        centralPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        tela.add(text);
-        tela.add(Box.createVerticalStrut(20));
-        tela.add(botaoCadastroButton);
-        tela.add(Box.createVerticalStrut(20));
-        tela.add(compraIngressoButton);
-        tela.add(Box.createVerticalStrut(20));
-        tela.add(imprimirIngressoButton);
-        tela.add(Box.createVerticalStrut(20));
-        tela.add(estatisticaVendasButton);
+        centralPanel.add(text);
+        centralPanel.add(Box.createVerticalStrut(20));
+        centralPanel.add(imagemLabel);
+        centralPanel.add(Box.createVerticalStrut(20));
+        centralPanel.add(botaoCadastroButton);
+        centralPanel.add(Box.createVerticalStrut(20));
+        centralPanel.add(compraIngressoButton);
+        centralPanel.add(Box.createVerticalStrut(20));
+        centralPanel.add(imprimirIngressoButton);
+        centralPanel.add(Box.createVerticalStrut(20));
+        centralPanel.add(estatisticaVendasButton);
+
+        JPanel contentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        contentPanel.add(centralPanel);
+
+        tela.add(contentPanel);
 
         botaoCadastroButton.addActionListener(e -> MenuCadastro.abrirTelaCadastro());
         compraIngressoButton.addActionListener(e -> menuCompra.abrirTelaCompra(cpf));
         imprimirIngressoButton.addActionListener(e -> menuImpressaoIngresso.abrirTelaImpressaoIngresso());
         estatisticaVendasButton.addActionListener(e -> MenuEstatistica.abrirTelaEstatisticas());
+
         tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         tela.setVisible(true);
     }

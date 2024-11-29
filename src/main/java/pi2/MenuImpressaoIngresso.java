@@ -14,7 +14,7 @@ public class MenuImpressaoIngresso {
         boolean ingressoEncontrado = false;
         for (Ingresso ingresso : Ingresso.ingressos) {
             if (cpf.equals(ingresso.getCpfCliente())) {
-                JOptionPane.showMessageDialog(null, "Ingresso existente para esse usuário: \n\n" + ingresso);
+                JOptionPane.showMessageDialog(null, ingresso);
                 ingressoEncontrado = true;
             }
         }
@@ -34,7 +34,7 @@ public class MenuImpressaoIngresso {
         for(Ingresso ingresso : Ingresso.ingressos){
             for (String assento : assentosCompradosAgora) {
                 if(ingresso.getIdentificacao().equals(assento)){
-                    JOptionPane.showMessageDialog(null, "Ingresso: \n\n" + ingresso);
+                    JOptionPane.showMessageDialog(null, ingresso);
                 }
             }
         }
