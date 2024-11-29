@@ -8,6 +8,9 @@ public class MenuCadastro {
         JFrame telaCadastro = new JFrame("Cadastro Usuário");
         telaCadastro.setLayout(new BoxLayout(telaCadastro.getContentPane(), BoxLayout.Y_AXIS));
         telaCadastro.setSize(600, 300);
+        ImageIcon icone = new ImageIcon("iconeTeatro.png");
+        Image imagemIcone = icone.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+        telaCadastro.setIconImage(imagemIcone);
 
         String[] textosCadastro = {"Nome: ", "CPF: ", "Telefone: ", "Endereço: ", "Data de Nascimento: "};
         JLabel[] labelsCadastro = new JLabel[5];

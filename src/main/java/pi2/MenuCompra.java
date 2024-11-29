@@ -41,6 +41,9 @@ public class MenuCompra {
             JFrame telaCompra = new JFrame("Compra de Ingressos");
             telaCompra.setLayout(new BorderLayout());
             telaCompra.setSize(1050, 600);
+            ImageIcon icone = new ImageIcon("iconeTeatro.png");
+            Image imagemIcone = icone.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+            telaCompra.setIconImage(imagemIcone);
             JPanel principalPanel = new JPanel();
             principalPanel.setLayout(new BoxLayout(principalPanel, BoxLayout.Y_AXIS));
             principalPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
