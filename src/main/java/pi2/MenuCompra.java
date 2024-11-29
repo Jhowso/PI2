@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuCompra {
     final static String[] sessoes = {"Platéia A", "Platéia B", "Camarotes", "Frisas", "Balcão Nobre"}; // Platéia A = 0; Platéia B = 1; Frisas = 2; Camarotes = 3; Balcão Nobre = 4;
@@ -259,6 +261,9 @@ public class MenuCompra {
     private void botaoConfirmaCompraFunc(int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada) {
         boolean assentoSelecionado = false;
         String listaAssentosSelecionados = "";
+        List<String> assentosCompradosAgora = new ArrayList<>(); // Lista para armazenar os assentos comprados no momento
+
+        // Verificar os assentos pré-selecionados
         for (int i = 0; i < botoesAssentos.length; i++) {
             for (int j = 0; j < botoesAssentos[i].length; j++) {
                 if (assentosPreSelecionados[i][j]) {
@@ -270,6 +275,7 @@ public class MenuCompra {
         }
 
         if (assentoSelecionado) {
+            // Confirmar seleção
             int confirmacao = JOptionPane.showConfirmDialog(
                     null,
                     "Confirma a seleção dos seguintes assentos?\n" + listaAssentosSelecionados,
@@ -278,10 +284,12 @@ public class MenuCompra {
             );
 
             if (confirmacao == JOptionPane.OK_OPTION) {
+                // Processar os assentos reservados
                 for (int i = 0; i < botoesAssentos.length; i++) {
                     for (int j = 0; j < botoesAssentos[i].length; j++) {
                         if (assentosPreSelecionados[i][j]) {
                             String identificacao = (char) ('A' + i) + String.valueOf(j + 1);
+                            assentosCompradosAgora.add(identificacao); // Adicionar à lista temporária
                             reservarAssentos(pecaSelecionada, horarioSelecionado, sessaoSelecionada, i, j, botoesAssentos[i][j], identificacao);
                             botoesAssentos[i][j].setBackground(Color.RED);
                             botoesAssentos[i][j].setText("Reservado");
@@ -291,13 +299,14 @@ public class MenuCompra {
                     }
                 }
 
+                // Solicitar impressão do ingresso
                 int imprimir = JOptionPane.showConfirmDialog(null, "Deseja imprimir o ingresso?", "Impressão de Ingresso", JOptionPane.YES_NO_OPTION);
-
                 if (imprimir == JOptionPane.YES_OPTION) {
-                    menuImpressaoIngresso.imprimirIngresso();
+                    menuImpressaoIngresso.imprimirIngresso(assentosCompradosAgora); // Passar a lista de assentos comprados agora
                 }
 
             } else {
+                // Resetar a seleção se a confirmação for cancelada
                 for (int i = 0; i < botoesAssentos.length; i++) {
                     for (int j = 0; j < botoesAssentos[i].length; j++) {
                         if (assentosPreSelecionados[i][j]) {

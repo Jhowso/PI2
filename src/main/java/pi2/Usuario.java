@@ -68,7 +68,7 @@ public class Usuario {
             usuarios.add(new Usuario(nome, cpf, telefone, endereco, dataNascimento));
             JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
             try (FileWriter escritor = new FileWriter("usuarios.txt", true)) {
-                escritor.write(nome + "," + cpf + "," + telefone + "," + endereco + "," + dataNascimento + "\n");
+                escritor.write(nome + "," + cpf.replaceAll("[^\\d]", "") + "," + telefone + "," + endereco + "," + dataNascimento + "\n");
                 telaCadastro.dispose();
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao salvar informações do usuário: " + e.getMessage());
@@ -167,10 +167,25 @@ public class Usuario {
             }
 
             String nome = textFieldsCadastro[0].getText();
-            String cpf = textFieldsCadastro[1].getText();
+            String cpf = textFieldsCadastro[1].getText().replaceAll("[^\\d]", ""); // Remove caracteres não numéricos
             String telefone = textFieldsCadastro[2].getText();
             String endereco = textFieldsCadastro[3].getText();
             String dataNascimento = textFieldsCadastro[4].getText();
+
+            // Verificação do CPF
+            if (!cpf.matches("\\d{11}")) {
+                throw new Erros("CPF deve conter 11 dígitos.");
+            }
+
+            // Verificação do telefone
+            if (!telefone.matches("\\(\\d{2}\\) \\d{5}-\\d{4}")) {
+                throw new Erros("Telefone deve estar no formato (xx) xxxxx-xxxx.");
+            }
+
+            // Verificação da data de nascimento
+            if (!dataNascimento.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                throw new Erros("Data de nascimento deve estar no formato dd/mm/aaaa.");
+            }
 
             Usuario.cadastrarUsuario(nome, cpf, telefone, endereco, dataNascimento, telaCadastro);
         } catch (Erros ex) {

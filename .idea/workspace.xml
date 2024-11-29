@@ -7,11 +7,10 @@
     <list default="true" id="d0751bf8-14e0-489a-a5a6-15266e0c4287" name="Changes" comment="19-11 14:03">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ingressos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ingressos.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Ingresso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Ingresso.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/MenuCadastro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuCadastro.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pi2/MenuCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuCompra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/MenuEstatistica.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuEstatistica.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/MenuImpressaoIngresso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuImpressaoIngresso.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pi2/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuarios.txt" beforeDir="false" afterPath="$PROJECT_DIR$/usuarios.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +41,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Jhowso/PI2.git&quot;,
+    &quot;url&quot;: &quot;https://github.com/RyanDoriguetto/PI2.git&quot;,
     &quot;accountId&quot;: &quot;83660b16-9220-497b-9871-390e0187110d&quot;
   }
 }</component>
@@ -106,6 +105,16 @@
     </task>
     <option name="localTasksCounter" value="4" />
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
