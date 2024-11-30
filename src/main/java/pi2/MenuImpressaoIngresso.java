@@ -26,7 +26,7 @@ public class MenuImpressaoIngresso {
         }
     }
 
-    public void imprimirIngresso(List<String> assentosCompradosAgora) {
+    public void imprimirIngresso(int pecaSelecionada, int horarioSelecionado, int sessaoSelecionada, List<String> assentosCompradosAgora) {
         if (assentosCompradosAgora.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Nenhum ingresso comprado nesta operação.");
             return;
@@ -35,7 +35,10 @@ public class MenuImpressaoIngresso {
         // Verifica quais ingressos são os assentos comprados no momento do clique do botão de compra.
         for(Ingresso ingresso : Ingresso.ingressos){
             for (String assento : assentosCompradosAgora) {
-                if(ingresso.getIdentificacao().equals(assento)){
+                        if(ingresso.getIdentificacao().equals(assento)
+                        && MenuCompra.nomePecas[pecaSelecionada].equals(ingresso.getNomePeca())
+                        && MenuCompra.nomeHorario[horarioSelecionado].equals(ingresso.getHorario())
+                        && MenuCompra.sessoes[sessaoSelecionada].equals(ingresso.getSessao())){
                     JOptionPane.showMessageDialog(null, ingresso);
                 }
             }

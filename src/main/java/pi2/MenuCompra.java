@@ -305,7 +305,7 @@ public class MenuCompra {
                 // Solicitar impressão do ingresso
                 int imprimir = JOptionPane.showConfirmDialog(null, "Deseja imprimir o ingresso?", "Impressão de Ingresso", JOptionPane.YES_NO_OPTION);
                 if (imprimir == JOptionPane.YES_OPTION) {
-                    menuImpressaoIngresso.imprimirIngresso(assentosCompradosAgora); // Passar a lista de assentos comprados agora
+                    menuImpressaoIngresso.imprimirIngresso(pecaSelecionada, horarioSelecionado, sessaoSelecionada, assentosCompradosAgora); // Passar a lista de assentos comprados agora
                 }
 
             } else {
