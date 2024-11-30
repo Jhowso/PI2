@@ -167,19 +167,14 @@ public class Usuario {
             }
 
             String nome = textFieldsCadastro[0].getText();
-            String cpf = textFieldsCadastro[1].getText().replaceAll("[^\\d]", ""); // Remove caracteres não numéricos
-            String telefone = textFieldsCadastro[2].getText();
+            String cpf = textFieldsCadastro[1].getText().replaceAll("[^\\d]", "");
+            String telefone = textFieldsCadastro[2].getText().replaceAll("[^\\d]", "");
             String endereco = textFieldsCadastro[3].getText();
             String dataNascimento = textFieldsCadastro[4].getText();
 
             // Verificação do CPF
             if (!cpf.matches("\\d{11}")) {
                 throw new Erros("CPF deve conter 11 dígitos.");
-            }
-
-            // Verificação do telefone
-            if (!telefone.matches("\\(\\d{2}\\) \\d{5}-\\d{4}")) {
-                throw new Erros("Telefone deve estar no formato (xx) xxxxx-xxxx.");
             }
 
             // Verificação da data de nascimento
