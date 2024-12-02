@@ -53,7 +53,6 @@ public class MenuEstatistica {
         double[] lucroPorPeca = new double[MenuCompra.nomePecas.length];
         int[] ingressosPorPeca = new int[MenuCompra.nomePecas.length];
 
-        // Calcula o lucro total por peça
         for (Ingresso ingresso : Ingresso.ingressos) {
             for (int i = 0; i < MenuCompra.nomePecas.length; i++) {
                 if (ingresso.getNomePeca().equals(MenuCompra.nomePecas[i])) {
@@ -64,24 +63,18 @@ public class MenuEstatistica {
             }
         }
 
-        // Exibição dos resultados
-        String mensagem = "Lucro total do teatro por peça:\n";
-        double somaLucros = 0;
-
+        String mensagem = "Lucro médio do teatro por peça:\n";
         for (int i = 0; i < MenuCompra.nomePecas.length; i++) {
-            mensagem += MenuCompra.nomePecas[i] + ": R$ " + String.format("%.2f", lucroPorPeca[i]) + "\n";
-            somaLucros += lucroPorPeca[i];
+            if (ingressosPorPeca[i] > 0) {
+                double lucroMedio = lucroPorPeca[i] / ingressosPorPeca[i];
+                mensagem += MenuCompra.nomePecas[i] + ": R$ " + String.format("%.2f", lucroMedio) + "\n";
+            } else {
+                mensagem += MenuCompra.nomePecas[i] + ": Nenhum ingresso vendido\n";
+            }
         }
 
-        // Calcula a média geral
-        double mediaLucro = somaLucros / MenuCompra.nomePecas.length;
-
-        mensagem += "\nMédia geral do lucro por peça: R$ " + String.format("%.2f", mediaLucro);
-
-        // Exibe a mensagem
-        JOptionPane.showMessageDialog(null, mensagem, "Lucro Total e Média por Peça", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, mensagem, "Lucro Médio por Peça", JOptionPane.INFORMATION_MESSAGE);
     }
-
 
 
     private static void minMaxLucroPorPecaeSessao() {

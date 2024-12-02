@@ -119,14 +119,6 @@ public class Usuario {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Cliente: " + nome + "\n" +
-                "Telefone: " + telefone +
-                " Endereço: " + endereco + "\n" +
-                "Data de nascimento: " + dataNascimento + "\n";
-    }
-
     public static void validarCPF(String cpf) throws Erros {
         // Remove qualquer caractere não numérico
         cpf = cpf.replaceAll("\\D", "");

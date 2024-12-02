@@ -48,26 +48,6 @@ public class MenuCompra {
             principalPanel.setLayout(new BoxLayout(principalPanel, BoxLayout.Y_AXIS));
             principalPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            // Painel superior para exibir informações do usuário
-            JPanel usuarioPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            Usuario usuarioAtual = null;
-
-            for (Usuario usuario : Usuario.usuarios) {
-                if (usuario.getCpf().equals(Usuario.cpfAtual)) {
-                    usuarioAtual = usuario;
-                    break;
-                }
-            }
-
-            JTextArea usuarioTextArea = new JTextArea(usuarioAtual.toString());
-            usuarioTextArea.setEditable(false); // Impede edição
-            usuarioTextArea.setOpaque(false); // Torna o fundo transparente
-            usuarioTextArea.setFocusable(false); // Evita foco no campo
-            usuarioTextArea.setFont(new JLabel().getFont()); // Usa a fonte padrão do JLabel
-            usuarioPanel.add(usuarioTextArea);
-
-            principalPanel.add(usuarioPanel);
-
             // Painel de seleção da peça
             JPanel pecaPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             JLabel textPeca = new JLabel("Selecione a peça desejada:  ");
