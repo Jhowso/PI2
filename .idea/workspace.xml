@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d0751bf8-14e0-489a-a5a6-15266e0c4287" name="Changes" comment="19-11 14:03">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ingressos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ingressos.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/MenuCompra.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuCompra.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pi2/MenuImpressaoIngresso.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pi2/MenuImpressaoIngresso.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjetoIntegrador-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetoIntegrador-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,6 +113,11 @@
     </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="fe413f71-c7b0-4bc3-9fab-e5b62457a617" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
@@ -131,6 +134,31 @@
                   </entry>
                 </map>
               </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="fe413f71-c7b0-4bc3-9fab-e5b62457a617">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="dir:C:/Users/ryan.doriguetto/IdeaProjects/ProjetoIntegrador/src/main/java/pi2" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
             </State>
           </value>
         </entry>
