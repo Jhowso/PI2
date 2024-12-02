@@ -63,18 +63,21 @@ public class MenuEstatistica {
             }
         }
 
-        String mensagem = "Lucro médio do teatro por peça:\n";
+        String mensagem = "Lucro total do teatro por peça:\n";
+        double somaLucros = 0;
+
         for (int i = 0; i < MenuCompra.nomePecas.length; i++) {
-            if (ingressosPorPeca[i] > 0) {
-                double lucroMedio = lucroPorPeca[i] / ingressosPorPeca[i];
-                mensagem += MenuCompra.nomePecas[i] + ": R$ " + String.format("%.2f", lucroMedio) + "\n";
-            } else {
-                mensagem += MenuCompra.nomePecas[i] + ": Nenhum ingresso vendido\n";
-            }
+            mensagem += MenuCompra.nomePecas[i] + ": R$ " + String.format("%.2f", lucroPorPeca[i]) + "\n";
+            somaLucros += lucroPorPeca[i];
         }
 
-        JOptionPane.showMessageDialog(null, mensagem, "Lucro Médio por Peça", JOptionPane.INFORMATION_MESSAGE);
+        double mediaLucro = somaLucros / MenuCompra.nomePecas.length;
+
+        mensagem += "\nMédia geral do lucro por peça: R$ " + String.format("%.2f", mediaLucro);
+
+        JOptionPane.showMessageDialog(null, mensagem, "Lucro Total e Média por Peça", JOptionPane.INFORMATION_MESSAGE);
     }
+
 
 
     private static void minMaxLucroPorPecaeSessao() {
