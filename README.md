@@ -46,7 +46,8 @@ O software tem como objetivo principal gerenciar o cadastro de usuários, compra
 - **Documentação UML:** Modelagem de sistemas com foco em engenharia de software.
 
 ---
-## Criadores
+
+## 🎓 Criadores
 
 Este projeto foi desenvolvido por:
 
