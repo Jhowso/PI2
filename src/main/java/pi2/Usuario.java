@@ -99,9 +99,9 @@ public class Usuario {
 
             boolean usuarioEncontrado = false;
             for (Usuario usuario : usuarios) {
-                if (usuario.getCpf().equals(cpf)) {
+                if (usuario.getCpf().equals(cpf.replaceAll("[^\\d]", ""))) {
                     usuarioEncontrado = true;
-                    Usuario.cpfAtual = cpf;
+                    Usuario.cpfAtual = cpf.replaceAll("[^\\d]", "");
                     break;
                 }
             }
@@ -122,8 +122,8 @@ public class Usuario {
     @Override
     public String toString() {
         return "Cliente: " + nome + "\n" +
-                "Telefone: " + telefone +
-                " Endereço: " + endereco + "\n" +
+                "Telefone: " + telefone + "\n" +
+                "Endereço: " + endereco + "\n" +
                 "Data de nascimento: " + dataNascimento + "\n";
     }
 
