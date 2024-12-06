@@ -4,7 +4,4 @@
 # Terceiro elemento: Telefone do usuário
 # Quarto elemento: Endereço do usuário
 # Quinto elemento: Data de nascimento
-Frederico Franco Marques,02304330142,62983302969,Rua JO 42,13/08/2000
-Ryan da Silva Doriguetto,71050969189,62993889974,Rua JO 42,13/08/2003
-Yuri de Oliveira Andrade,71060347113,62995180760,Vila pedroso,12/07/2004
-THYAGO DORIGUETTO PINHEIRO,00278117198,(62) 99282-4797,RUA J.O 42 ,05/08/1983
+
